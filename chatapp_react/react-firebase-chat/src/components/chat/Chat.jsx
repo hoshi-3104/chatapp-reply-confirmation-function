@@ -141,6 +141,7 @@ const Chat = () =>{
                     
                 </div>
                 <button className="sendButton" onClick={handleSend}>Send</button>
+                <button className="sendButton" onClick={handleSend}>Send</button>
             </div>
         </div>
     )
