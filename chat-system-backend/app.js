@@ -51,4 +51,8 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+var PORT = process.env.PORT || 3001; 
+app.listen(PORT, '0.0.0.0', () => {   console.log(`Server is running on http://0.0.0.0:${PORT}`); });
+ 
 module.exports = app;
+
