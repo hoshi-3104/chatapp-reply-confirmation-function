@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 require('dotenv').config();
 
 var app = express();
-// json形式できたパラメータを変換
+// json形式できたパラメータを変換する
 app.use(express.json());
 
 app.post('/api/mentions', function(req, res, next) {
