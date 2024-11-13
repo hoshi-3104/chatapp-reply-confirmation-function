@@ -1,7 +1,14 @@
 .chatList{
-    flex: 1;
     /* overflow: scroll;  */
-    
+    height: 100%;
+    display: flex;
+    flex-direction: column; /* 内部要素を縦に並べる */
+    .member_and_search{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
     .search{
         display: flex;
         align-items: center;
@@ -41,35 +48,67 @@
         }
     }
 
-    .item{
+    .member{
         display: flex;
         align-items: center;
-        gap: 20px;
-        padding: 20px;
-        border-bottom: 1px solid #dddddd35;
+        gap: 10px;
+        /* padding: 20px; */
+        gap: 10px;
+        padding: 0px 0px 0px 15px; 
+        letter-spacing: -0.08em;
 
         img{
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .texts{
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-
-            span{
-                font-weight: 500;
-            }
-
-            p{
-                font-size: 14px;
-                font-weight: 300;
-            }
-
-
+            width: 45px;
+            height: 30px;
+            /* object-fit: cover; */
         }
     }
+
+    .items{
+            background-color: #f3f1f1; /* 赤色の背景 */
+            border-radius: 10px; /* 丸角の半径 */
+            width: calc(100% - 20px); /* 左右のマージンを考慮 */
+            max-width: 100%; /* 幅の最大値 */
+            box-sizing: border-box;
+            margin: 10px; /* 四側面のマージンを10pxに設定 */
+            height: 100%; /* 親要素の高さを引き継ぐ */
+            display: flex;
+            flex-direction: column; /* アイテムを縦に並べる */
+
+        .item{
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 15px 20px;
+            border-bottom: 1px solid #cbc8c8;
+    
+            img{
+                width: 40px;
+                height: 40px;
+                border-radius: 20%;
+                object-fit: cover;
+            }
+    
+            .texts{
+                display: flex;
+                flex-direction: column;
+                gap: px;
+    
+                span{
+                    font-weight: 500;
+                }
+    
+                p{
+                    font-size: 14px;
+                    font-weight: 300;
+                }
+    
+    
+            }
+        }
+
+    }
+    
+
 }
+

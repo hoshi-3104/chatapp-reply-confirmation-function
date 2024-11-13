@@ -6,32 +6,38 @@ const ChatList = () => {
     const [addMode, setAddMode] = useState(false);
     return (
         <div className="chatList">
-            <div className="search">
-                <div className="searchBar">
-                    <img src="./search.png" alt="" />
-                    <input type="text" placeholder="Search" />
+            <div className="member_and_search">
+                <div className="member">
+                    <img src="./Member_icon.png" alt="" />
+                    <h1>Member</h1>
                 </div>
+                <div className="search">
                 <img
                     src={addMode ? "./minus.png" : "./plus.png"}
                     alt=""
                     className="add"
                     onClick={() => setAddMode((prev) => !prev)}
                 />
-            </div>
-            <div className="item">
-                <img src="./avatar.png" alt="" />
-                <div className="texts">
-                    <span>Wada</span>
-                    <p>こんにちは</p>
                 </div>
             </div>
-            <div className="item">
-                <img src="./avatar.png" alt="" />
-                <div className="texts">
-                    <span>Hoshino</span>
-                    <p>こんにちは</p>
+
+            <div className="items">
+                <div className="item">
+                    <img src="./avatar.png" alt="" />
+                    <div className="texts">
+                        <span>Wada</span>
+                        <p>こんにちは</p>
+                    </div>
+                </div>
+                <div className="item">
+                    <img src="./avatar.png" alt="" />
+                    <div className="texts">
+                        <span>Hoshino</span>
+                        <p>こんにちは</p>
+                    </div>
                 </div>
             </div>
+
             {addMode && <AddUser/>}
         </div>
     );
