@@ -73,7 +73,7 @@
 
             &.own{
                 align-self: flex-end;
-
+                justify-content: flex-end; /* 追加した部分*/
                 .texts{
                     p{
                         background-color: #5183fe;

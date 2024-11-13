@@ -1,11 +1,8 @@
 var express = require('express');
 var db = require('../utils/db'); // データベース接続の設定をインポート
-const bodyParser = require('body-parser');
-
 require('dotenv').config();
 
 var app = express();
-// json形式できたパラメータを変換
 app.use(express.json());
 
 /**
@@ -27,11 +24,11 @@ app.use(express.json());
  */
 app.post('/api/messages', function(req, res, next) {
   try {
-    var sql = `INSERT INTO MESSAGES(BODY, ROOM_ID, TO_USER_ID, SEND_USER_ID, THREAD_ID, SEEN, IS_SENT, SEND_TIME)
-     VALUES (?, ?, ?, ?, ?, false, false, CURRENT_TIMESTAMP);`;
+    var sql = `INSERT INTO MESSAGES(MESSAGES, TO_USER_ID, SEND_USER_ID, THREAD_ID, SEEN, IS_SENT, SEND_TIME)
+     VALUES (?, ?, ?, ?, false, false, CURRENT_TIMESTAMP);`;
     // フロントエンドの "messages" プロパティを使うように変更
-    const {messages, room_id, to_user_id, send_user_id, thread_id } = req.body;
-
+    const {messages, to_user_id, send_user_id, thread_id } = req.body;
+    const finalThreadId = thread_id || 0;
     // BODYの値が空でないことを確認
     if (!messages || messages.trim() === "") {
       return res.status(400).json({
@@ -39,12 +36,13 @@ app.post('/api/messages', function(req, res, next) {
         message: "メッセージ本文が空です。"
       });
     }
+
     db.query(sql, 
-      [messages, room_id, to_user_id, send_user_id, thread_id],
+      [messages, to_user_id, send_user_id, finalThreadId],
       (err, result) => {
         // エラーが発生した場合は、catch (error)の処理に流す
         if (err) {
-          throw new Error(err);
+          return res.status(500).json({ result_code: 0, message: "データベースエラー" });
         }
 
       return res.status(200).json({
@@ -54,6 +52,48 @@ app.post('/api/messages', function(req, res, next) {
     });
   } catch (error) {
     // 次の処理へ
+    next(error);
+  }
+});
+
+//メッセージ取得API
+app.get('/api/messages', function(req, res, next) {
+  try {
+    const { send_user_id, to_user_id, thread_id } = req.query;
+
+    // クエリパラメータが不正の場合のエラーハンドリング
+    if (!send_user_id || !to_user_id) {
+      return res.status(400).json({
+        result_code: 0,
+        message: "送信者IDと受信者IDは必須です。"
+      });
+    }
+
+    // SQLクエリの構築
+    let sql = `
+      SELECT MESSAGE_ID, MESSAGES, TO_USER_ID, SEND_USER_ID, THREAD_ID, SEEN, IS_SENT, SEND_TIME
+      FROM MESSAGES
+      WHERE (SEND_USER_ID = ? AND TO_USER_ID = ?)
+        OR (SEND_USER_ID = ? AND TO_USER_ID = ?)
+    `;
+
+    // スレッドIDが指定されている場合、そのスレッドのメッセージだけを取得
+    if (thread_id) {
+      sql += " AND THREAD_ID = ?";
+    }
+
+    // メッセージを取得
+    db.query(sql, [send_user_id, to_user_id, to_user_id, send_user_id, thread_id], (err, result) => {
+      if (err) {
+        return res.status(500).json({ result_code: 0, message: "データベースエラー" });
+      }
+
+      return res.status(200).json({
+        result_code: 1,
+        messages: result
+      });
+    });
+  } catch (error) {
     next(error);
   }
 });

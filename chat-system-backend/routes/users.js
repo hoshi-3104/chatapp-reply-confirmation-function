@@ -53,7 +53,28 @@ WHERE USER_ID = ?;
     next(error);
   }
 });
+// ユーザー一覧を取得するコード
+app.get('/api/users', function(req, res, next) {
+  try {
+    var sql = `SELECT * FROM USER_MASTER;`;
 
+    db.query(sql, (err, result) => {
+        // エラーが発生した場合は、catch (error)の処理に流す
+        if (err) {
+          throw new Error(err);
+        }
+
+      return res.status(200).json({
+          result_code: 1,
+          message: "ユーザ一覧取得完了",
+          data: result
+        });
+    });
+  } catch (error) {
+    // 次の処理へ
+    next(error);
+  }
+});
 /**
  * ユーザー登録API
  * 
