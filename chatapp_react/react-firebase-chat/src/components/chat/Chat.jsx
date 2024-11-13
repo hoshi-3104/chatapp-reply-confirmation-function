@@ -54,82 +54,134 @@ const Chat = () =>{
     };
     return(
         <div className="chat">
+            <div className="tab-1">
+                <label>
+                    <input type="radio" name="tab-1" defaultChecked />
+                    タブ1
+                </label>
+            
+                <label>
+                    <input type="radio" name="tab-1" />
+                    タブ2
+                </label>
+
+                <label>
+                    <input type="radio" name="tab-1" />
+                    タブ3
+                </label>
+
+            </div>
+
             <div className="top">
                 <div className="user">
                     <img src="./avatar.png" alt="" />
                     <div className="texts">
-                        <span>山田</span>
-                        <p>山田です</p>
+                        <span>wada</span>
                     </div>
-                </div>
-                <div className="icons">
-                    <img src="./phone.png" alt="" />
-                    <img src="./video.png" alt="" />
-                    <img src="./info.png" alt="" />
                 </div>
             </div>
             <div className="center">
                 <div className="message">
-                    <img src="./avatar.png" alt="" />
+                    <div className="user">
+                        <img src="./avatar.png" alt="" />
+                        <span className="name">和田洸記</span>
+                        <span className="time">12:00</span>
+                    </div>
                     <div className="texts">
-                        <p>hello
+                        <p>Lorem ipsum dolor sit, amet consectetur 
+                            adipisicing elit. Suscipit eius voluptas 
+                            labore repellat quisquam veniam, optio tempora 
+                            fugit atque nisi provident a nemo consequuntur 
+                            expedita ad dolores soluta ab fugiat?
                         </p>
-                        <span>1 min ago</span>
+                        <div className="replyuser">
+                            <img src="./avatar.png" alt="" />
+                            <img src="./avatar.png" alt="" />
+                            <img src="./avatar.png" alt="" />
+                            <span className="reply_num">3件の返信</span>
+                            <button className="reply">スレッド返信</button>    
+                        </div>
                     </div>
                 </div>
                 <div className="message own">
                     <div className="texts">
-                        <p>a
-                        </p>
-                        <span>1 min ago</span>
+                        <span>12:00</span>
+                        <p>Lorem ipsum dolor sit, amet consectetur 
+                            adipisicing elit. Suscipit eius voluptas 
+                            labore repellat quisquam veniam, optio tempora 
+                            fugit atque nisi provident a nemo consequuntur 
+                            expedita ad dolores soluta ab fugiat?</p>    
                     </div>
                 </div>
                 <div className="message">
-                    <img src="./avatar.png" alt="" />
+                    <div className="user">
+                        <img src="./avatar.png" alt="" />
+                        <span className="name">和田洸記</span>
+                        <span className="time">12:00</span>
+                    </div>
                     <div className="texts">
-                        <p>b
+                        <p>hello
                         </p>
-                        <span>1 min ago</span>
+                        <div className="replyuser">
+                            <img src="./avatar.png" alt="" />
+                            <img src="./avatar.png" alt="" />
+                            <img src="./avatar.png" alt="" />
+                            <span className="reply_num">3件の返信</span>
+                            <button className="reply">スレッド返信</button>    
+                        </div>
+                        
                     </div>
                 </div>
                 <div className="message own"> 
                     <div className="texts">
-                        <img src="https://www.hiroshima-cu.ac.jp/top-img/mainvisual01.jpg" alt="" />
-                        <p>c
+                        {/* <img src="https://www.hiroshima-cu.ac.jp/top-img/mainvisual01.jpg" alt="" /> */}
+                        <p>caaaaaaaaa
                         </p>
-                        <span>1 min ago</span>
+                        <span>12:00</span>
                     </div>
                 </div>
                 <div className="message">
-                    <img src="./avatar.png" alt="" />
+                    <div className="user">
+                        <img src="./avatar.png" alt="" />
+                        <span className="name">和田洸記</span>
+                        <span className="time">12:00</span>
+                    </div>
                     <div className="texts">
-                        <p>b
+                        <p>hello
                         </p>
-                        <span>1 min ago</span>
+                        <div className="replyuser">
+                            <img src="./avatar.png" alt="" />
+                            <img src="./avatar.png" alt="" />
+                            <img src="./avatar.png" alt="" />
+                            <span className="reply_num">3件の返信</span>
+                            <button className="reply">スレッド返信</button>    
+                        </div>
+                        
                     </div>
                 </div>
                 <div className="message own">
                     <div className="texts">
-                        <p>a
+                        <span>12:00</span>
+                        <p>aaaaaaaaaaaaaaaaaa
                         </p>
-                        <span>1 min ago</span>
+                        
                     </div>
                 </div>
                 <div ref={endRef}></div>
             </div>
             <div className="bottom">
-                <div className="icons">
+                {/* <div className="icons">
                     <img src="./img.png" alt="" />
                     <img src="./camera.png" alt="" />
                     <img src="./mic.png" alt="" />
-                </div>
+                </div> */}
                 <input 
                 type="text" 
                 placeholder="Type a message..." 
                 value={text}
                 onChange={e=>setText(e.target.value)}
                 />
-                <div className="emoji">
+                {/* <div className="emoji">
                     <img 
                         src="./emoji.png" 
                         alt="" 
@@ -138,10 +190,21 @@ const Chat = () =>{
                     <div className="picker">
                         <EmojiPicker open={open} onEmojiClick={handleEmoji}/>
                     </div>
-                    
+                </div> */}
+                <div className="sendButtons">
+                    <img 
+                    src="./send.png"
+                    alt="Send Mention" 
+                    className="sendButton" 
+                    onClick={handleSend} 
+                    />
+                    <img 
+                    src="./send_mention.png" 
+                    alt="Send Message" 
+                    className="sendButton" 
+                    onClick={handleSend} 
+                    />
                 </div>
-                <button className="sendButton" onClick={handleSend}>Send</button>
-                <button className="sendButton" onClick={handleSend}>Send</button>
             </div>
         </div>
     )

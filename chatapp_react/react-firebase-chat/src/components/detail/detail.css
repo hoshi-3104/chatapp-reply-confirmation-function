@@ -1,102 +1,285 @@
 .detail{
     flex: 1;
-    .user{
-        padding: 30px 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
-        border-bottom: 1px solid #dddddd35;
+    .response_needed{
+        .title{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0px 0px 10px; 
+            letter-spacing: -0.08em;
     
-        img{
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
+            img{
+                width: 45px;
+                height: 25px;
+            }
+        }
+
+        .items {
+            background-color: #f3f1f1; /* 背景色 */
+            border-radius: 10px; /* 丸角の半径 */
+            width: calc(100% - 20px); /* 左右のマージンを考慮 */
+            max-width: 100%; /* 幅の最大値 */
+            box-sizing: border-box;
+            margin: 10px; /* 四側面のマージンを10pxに設定 */
+            height: 80%; /* 親要素の高さを引き継ぐ */
+            display: flex;
+            flex-direction: column; /* アイテムを縦に並べる */
+            max-height: 260px; /* 表示できる最大高さ */
+            overflow-y: auto; /* 高さを超えた場合にスクロール */
+            scrollbar-width: none; /* Firefox向け: スクロールバーを非表示 */
+          }
+          
+          /* Chrome, Safari, Edge のスクロールバー非表示 */
+          .items::-webkit-scrollbar {
+            display: none;
+          }
+          
+          /* その他のCSSコードはそのまま */
+          .message {
+            padding: 7px 0px 10px 10px; 
+            max-width: 93%;
+            gap: 20px;
+          }
+          
+          .message .user {
+            align-items: center;
+            display: flex;
+          }
+          
+          .message .user img {
+            margin-right: -16px;
+            width: 20px;
+            height: 20px;
+            border-radius: 20%;
             object-fit: cover;
-        }
-    }
-
-    .info{
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 25px;
-
-        .option{
-
-            .title{
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-
-                img{
-                    width: 30px;
-                    height: 30px;
-                    background-color: rgba(17, 25, 40, 0.3);
-                    padding: 10px;
-                    border-radius: 50%;
-                    cursor: pointer;
-                }
-            }
-
-            .photos{
-                display: flex;
-                flex-direction: column;
-                gap: 20px;
-                margin-top: 20px;
-
-                .photoItem{
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-
-                    .photoDetail{
-                        display: flex;
-                        align-items: center;
-                        gap: 20px;
-
-                        img{
-                            width: 40px;
-                            height: 40px;
-                            border-radius: 5px;
-                            object-fit: cover;
-                        }
-
-                        span{
-                            font-style: 14px;
-                            color: lightgray;
-                            font-weight: 300;
-                        }
-                    }
-                    .icon{
-                        width: 30px;
-                        height: 30px;
-                        background-color: rgba(17, 25, 40, 0.3);
-                        padding: 10px;
-                        border-radius: 50%;
-                        cursor: pointer;
-                    }
-                }
-            }
-        }
-
-        button{
-            padding: 15px;
-            background-color: rgba(255, 48, 48, 0.5);
-            color: white;
-            border: none;
+          }
+          
+          .message .user .time {
+            font-size: 0.6em;
+            letter-spacing: -0.05em;
+            margin-left: -15px;
+            margin-bottom: -5px;
+          }
+          
+          .message .texts {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+          }
+          
+          .message .texts p {
+            padding: 10px;
             border-radius: 5px;
-            cursor: pointer;
-
-            &:hover{
-                background-color: rgba(255, 48, 48, 0.687);
-            }
-            
-            &.logout{
-                padding: 10px;
-                background-color: rgba(57, 57, 255, 0.763);
-
-            }
-        }
+            background-color: #E7E5E5;
+            box-shadow: rgba(99, 99, 99, 0.4) 0px 2px 8px 0px;
+            margin-bottom: 3px;
+          }
+          
+          .message .texts span {
+            font-size: 13px;
+          }
+          
+          .button {
+            margin-top: 3px;
+          }
+          
+          .button .reply,
+          .button .completion {
+            padding: 5px 10px;
+            border-radius: 30px;
+            font-size: 10px;
+            border: none;
+            transition: background-color 0.3s, color 0.3s;
+          }
+          
+          .button .reply {
+            margin-right: 2px;
+            background-color: #44454F;
+            color: #fff;
+          }
+          
+          .button .reply:hover {
+            background-color: #fff;
+            color: #44454F;
+          }
+          
+          .button .completion {
+            background-color: #5183fe;
+            color: #fff;
+          }
+          
+          .button .completion:hover {
+            background-color: #fff;
+            color: #5183fe;
+          }
+          
+          .button .limit {
+            font-size: 10px;
+            letter-spacing: -0.05em;
+            margin-left: 5px;
+          }
+          
     }
+
+
+    .response_waited{
+      .title{
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 10px 0px 0px 10px; 
+          letter-spacing: -0.08em;
+  
+          img{
+              width: 45px;
+              height: 25px;
+          }
+      }
+
+      .items {
+          background-color: #f3f1f1; /* 背景色 */
+          border-radius: 10px; /* 丸角の半径 */
+          width: calc(100% - 20px); /* 左右のマージンを考慮 */
+          max-width: 100%; /* 幅の最大値 */
+          box-sizing: border-box;
+          margin: 10px; /* 四側面のマージンを10pxに設定 */
+          height: 80%; /* 親要素の高さを引き継ぐ */
+          display: flex;
+          flex-direction: column; /* アイテムを縦に並べる */
+          max-height: 260px; /* 表示できる最大高さ */
+          overflow-y: auto; /* 高さを超えた場合にスクロール */
+          scrollbar-width: none; /* Firefox向け: スクロールバーを非表示 */
+        }
+        
+        /* Chrome, Safari, Edge のスクロールバー非表示 */
+        .items::-webkit-scrollbar {
+          display: none;
+        }
+
+        .item{
+          width: 100%;
+          background-color: #ffd4d4;
+        }
+        
+        /* その他のCSSコードはそのまま */
+        .message {
+          padding: 20px 0px 10px 10px;
+          max-width: 93%;
+          gap: 20px;
+          position: relative; 
+        }
+        
+        .message .user {
+          align-items: center;
+          display: flex;
+        }
+        
+        .message .user img {
+          margin-right: -16px;
+          width: 20px;
+          height: 20px;
+          border-radius: 20%;
+          object-fit: cover;
+        }
+        
+        .message .user .reply_text {
+          font-size: 0.7em;
+          letter-spacing: -0.05em;
+          position: absolute; 
+          top: 0; 
+          left:0; 
+          margin-top: 3px;
+          margin-left: 12px;
+          color: #ff0000;
+          font-weight: bold;
+        }
+        .message .user .time {
+          font-size: 0.6em;
+          letter-spacing: -0.05em;
+          position: absolute; 
+          top: 0; 
+          right:0; 
+          margin-top: 6px;
+        }
+        
+        .message .texts {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 3px;
+        }
+        
+        .message .texts p {
+          padding: 10px;
+          border-radius: 5px;
+          background-color: #44454F;
+          box-shadow: rgba(99, 99, 99, 0.4) 0px 2px 8px 0px;
+          margin-bottom: 3px;
+          color: #E7E5E5
+        }
+        
+        .message .texts span {
+          font-size: 13px;
+        }
+        
+        .button {
+          margin-top: 3px;
+          display: flex;
+          justify-content: space-between; /* 両端に要素を配置 */
+          align-items: center; /* 縦方向に中央揃え */
+          width: 100%
+          
+        }
+        .button .replyuser{
+          display: flex;
+          align-items: flex-end;
+
+          span{
+            margin-left: 2px;
+          }
+          
+          img{
+            width: 20px;
+            height: 20px;
+            padding: 1px 1px;
+            border-radius: 20%;
+          }
+        }
+        
+        .button .reply {
+          padding: 5px 10px;
+          border-radius: 30px;
+          font-size: 10px;
+          border: none;
+          transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .button .reply {
+          margin-right: 2px;
+          background-color: #44454F;
+          color: #fff;
+        }
+        
+        .button .reply:hover {
+          background-color: #fff;
+          color: #44454F;
+        }
+        
+        .button .completion {
+          background-color: #5183fe;
+          color: #fff;
+        }
+        
+        .button .completion:hover {
+          background-color: #fff;
+          color: #5183fe;
+        }
+        
+        .button .limit {
+          font-size: 10px;
+          letter-spacing: -0.05em;
+        }
+        
+  }
 }
