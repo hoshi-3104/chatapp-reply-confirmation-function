@@ -12,7 +12,9 @@
   "dependencies": {
     "@chatscope/chat-ui-kit-react": "^2.0.3",
     "@chatscope/use-chat": "^3.1.2",
+    "cors": "^2.8.5",
     "emoji-picker-react": "^4.12.0",
+    "express": "^4.21.1",
     "firebase": "^10.13.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
