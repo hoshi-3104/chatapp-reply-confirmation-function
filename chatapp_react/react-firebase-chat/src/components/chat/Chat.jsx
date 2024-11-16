@@ -46,9 +46,9 @@ const Chat = () =>{
                 const result = await response.json();
                 if (result.result_code === 1) {
                     setMessages(prevMessages => [...prevMessages, { 
-                        text, 
-                        user: sendUserId, 
-                        time: new Date().toLocaleTimeString(), 
+                        MESSAGES: text,
+                        SEND_USER_ID: sendUserId, 
+                        SEND_TIME: new Date().toISOString(), 
                     }]);
                     setText("");
                 }
