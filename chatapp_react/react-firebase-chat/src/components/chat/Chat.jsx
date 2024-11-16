@@ -6,12 +6,17 @@ const Chat = () =>{
     const[text,setText]=useState("");
     const[messages, setMessages] = useState([]);
     const endRef= useRef(null);
-    const sendUserId = 1; // サンプルとして固定値。実際にはユーザーIDを使用
-    const toUserId = 2;   // 宛先も固定値。実際には動的な値にする
+    const sendUserId = 2; // サンプルとして固定値。実際にはユーザーIDを使用
+    const toUserId = 1;   // 宛先も固定値。実際には動的な値にする
 
     const handleSend = async () => {
         if (text.trim() === "") return; // 空メッセージの送信を防ぐ
         const threadId = 0;
+        const sendTime = (() => {
+          const now = new Date();
+          const timestamp = now.toISOString();  // 現在のタイムスタンプ（ISO形式）
+          return timestamp;
+      })();
 
         // API呼び出しでメッセージをデータベースに保存
         try {
@@ -35,12 +40,7 @@ const Chat = () =>{
                     setMessages(prevMessages => [...prevMessages, { 
                         MESSAGES: text, 
                         SEND_USER_ID: sendUserId,
-                        SEND_TIME: (() => {
-                          const now = new Date();
-                          const hours = String(now.getHours()).padStart(2, '0');
-                          const minutes = String(now.getMinutes()).padStart(2, '0');
-                          return `${hours}:${minutes}`;
-                      }),
+                        SEND_TIME: sendTime,
                     }]);
 
                     setText("");
@@ -78,26 +78,42 @@ const Chat = () =>{
   const renderMessages = () => {
     return messages.map((message, index) => {
       const isOwnMessage = message.SEND_USER_ID === sendUserId;
-      return (
-        <div
-          key={index}
-          className={`message ${isOwnMessage ? "own" : "other"}`} // 自分のメッセージと相手のメッセージを区別
-        >
-          {/* 相手のメッセージにはアイコンを表示 */}
-          {!isOwnMessage && (
+      // 時間のフォーマット処理
+      const formattedTime = (() => {
+        const date = new Date(message.SEND_TIME); // ISO形式の日付をDateオブジェクトに変換
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        return `${hours}:${minutes}`;
+            })();
+  
+      if (isOwnMessage) {
+        // For the user's own messages
+        return (
+          <div key={index} className="message own">
+            <div className="texts">
+              <span className="time">{formattedTime}</span>
+              <p>{message.MESSAGES}</p>
+            </div>
+          </div>
+        );
+      } else {
+        // For other user's messages
+        return (
+          <div key={index} className="message">
             <div className="user">
               <img src="./avatar.png" alt="User Avatar" />
               <span className="name">和田洸記</span>
-              <span className="time">{message.SEND_TIME}</span>
+              <span className="time">{formattedTime}</span>
             </div>
-          )}
-          <div className={`texts ${isOwnMessage ? "ownText" : "otherText"}`}>
-            <p>{message.MESSAGES}</p>
+            <div className="texts">
+              <p>{message.MESSAGES}</p>
+            </div>
           </div>
-        </div>
-      );
+        );
+      }
     });
   };
+  
 
     return(
         <div className="chat">
