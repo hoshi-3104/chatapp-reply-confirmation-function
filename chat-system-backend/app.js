@@ -15,6 +15,9 @@ var messagesRouter = require('./routes/messages');
 var roomsRouter = require('./routes/rooms');
 var mentionRouter = require('./routes/mentions');
 var threadRouter = require('./routes/threads');
+var unrepliedRouter = require('./routes/unreplied');
+var waiting_responseRouter = require('./routes/waiting_response');
+
 var app = express();
 
 // view engine setup
@@ -34,6 +37,8 @@ app.use('/', messagesRouter);
 app.use('/', roomsRouter);
 app.use('/', mentionRouter);
 app.use('/', threadRouter);
+app.use('/', unrepliedRouter);
+app.use('/', waiting_responseRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
