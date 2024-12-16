@@ -1,5 +1,6 @@
 import "./chat.css"
 import React, { useState, useRef, useEffect } from "react";
+import AddUser from "./userSelect/useSelect";
 
 const Chat = () =>{
     const[text,setText]=useState(""); // メッセージ入力欄の状態を管理。デフォルトを空のテキストに
