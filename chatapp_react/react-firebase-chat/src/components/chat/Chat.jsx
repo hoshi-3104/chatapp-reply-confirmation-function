@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./chat.css";
+import AddUser from "./userSelect/userSelect";
 
 const Chat = () => {
   const [open, setOpen] = useState(false);
+  const [addUserVisible, setAddUserVisible] = useState(false); // AddUser の表示制御
   const [text, setText] = useState("");
   const [messages, setMessages] = useState([]);
   const endRef = useRef(null);
@@ -70,7 +72,7 @@ const Chat = () => {
 
   return (
     <div className="chat">
-        <div className="tab-1">
+      <div className="tab-1">
         <label>
           <input type="radio" name="tab-1" defaultChecked />
           タブ1
@@ -124,10 +126,21 @@ const Chat = () => {
           onChange={(e) => setText(e.target.value)}
         />
         <div className="sendButtons">
-          <img src="./send.png" alt="Send" className="sendButton" onClick={handleSend} />
-          <img src="./send_mention.png" alt="Send" className="sendButton" onClick={handleSend} />
+          <img
+            src="./send.png"
+            alt="Send"
+            className="sendButton"
+            onClick={handleSend}
+          />
+          <img
+            src="./send_mention.png"
+            alt="Add User"
+            className="mention_sendButton"
+            onClick={() => setAddUserVisible((prev) => !prev)} // AddUser の表示トグル
+          />
         </div>
       </div>
+      {addUserVisible && <AddUser />} {/* AddUser を条件付きで表示 */}
     </div>
   );
 };

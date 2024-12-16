@@ -22,7 +22,7 @@ const Detail = () => {
             <div className="button">
               <button className="reply">スレッド返信</button>
               <button className="completion">完 了</button>
-              <span className="limit">2024/12/27 12:00</span>
+              <span className="limit">期限 : 2024/12/27 12:00</span>
             </div>
           </div>
           
@@ -38,7 +38,7 @@ const Detail = () => {
             <div className="button">
               <button className="reply">スレッド返信</button>
               <button className="completion">完 了</button>
-              <span className="limit">2024/12/27 12:00</span>
+              <span className="limit">期限 : 2024/12/27 12:00</span>
             </div>
           </div>
           <div className="message">
@@ -53,7 +53,7 @@ const Detail = () => {
             <div className="button">
               <button className="reply">スレッド返信</button>
               <button className="completion">完 了</button>
-              <span className="limit">2024/12/27 12:00</span>
+              <span className="limit">期限 : 2024/12/27 12:00</span>
             </div>
           </div>
         </div>

@@ -1,0 +1,134 @@
+.userSelect{
+    z-index: 1000;
+    width: 180px;
+    max-height: 250px; /* スクロール可能な高さを設定 */
+    padding: 10px 10px 0px 10px;
+    background-color: rgb(231, 231, 231);
+    border-radius: 10px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    overflow-y: scroll; /* スクロールを有効にするがスクロールバーは非表示にする */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+    
+
+    .user{
+        display: flex;
+        align-items: center;
+        flex-direction: column; /* アイテムを縦に並べる */
+        align-items: flex-start; /* 左揃え */
+        
+    .checkboxItem {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: -15px;
+        padding-bottom: 3px; /* ボーダーとコンテンツの間に余白を追加 */
+        width: 100%;
+        border-bottom: 1px solid #cbc8c8;
+        
+
+        img{
+            height: 20px;
+            width: 20px;
+            border-radius: 20%;
+        }
+       
+        .checkbox {
+        appearance: none;
+        position: relative;
+        width: 20px;
+        height: 20px;
+        border: 1px solid #06b6d4;
+        border-radius: 10px;
+        cursor: pointer;
+        }
+        
+        .checkbox:checked::after {
+        content: "";
+        position: absolute;
+        top: 5px;
+        left: 3px;
+        width: 12px;
+        height: 6px;
+        border-bottom: 2px solid #06b6d4;
+        border-left: 2px solid #06b6d4;
+        transform: rotate(-45deg);
+        }
+     }
+  }
+
+  .buttom {
+    position: sticky; /* 固定表示 */
+    bottom: 0; /* スクロール時に下部に固定 */
+    background-color: rgb(231, 231, 231); 
+
+    display: flex;
+    flex-direction: column; /* 縦に並べる */
+    gap: 5px; /* ボタン間の間隔を設定 */
+    align-items: flex-start; /* ボタンを中央揃え（必要に応じて変更） */
+    margin-top: 20px;
+    padding-bottom: 5px;
+
+    .addlist-wrapper{
+        display: flex;
+        align-items: center; /* 垂直方向に中央揃え */
+        gap: 1px; /* ボタンとアイコンの間のスペース */
+        .icon-button{
+            display: flex;
+            align-items: center; /* アイコン自体をボタン内で中央揃え */
+            justify-content: center; /* 水平方向も中央揃え */
+            background: none; /* 背景を透明に */
+            border: none; /* 枠線を削除 */
+            padding: 4px; /* アイコンの周囲に余白を追加 */
+            cursor: pointer; /* ホバー時にクリック可能な表示 */
+            img{
+                width: 23px;
+                height: 23px;
+                background-color: transparent; /* 背景色を透明に設定 */
+                border: none; /* 枠線を消去 */
+            }
+        }
+    }
+}
+  
+  .buttom .addlist {
+    margin-top: 5px;
+    padding: 5px 10px; /* ボタンの余白 */
+    border: none;
+    border-radius: 5px;
+    background-color: #44454F; /* ボタンの背景色 */
+    color: white; /* テキストの色 */
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.3s, color 0.3s;
+
+  }
+  
+  .buttom .addlist:hover {
+    background-color: #fff;
+    color: #44454F;
+  }
+
+  .buttom .send {
+    padding: 5px 10px; /* ボタンの余白 */
+    border: none;
+    border-radius: 5px;
+    background-color: #5183fe; /* ボタンの背景色 */
+    color: white; /* テキストの色 */
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.3s, color 0.3s;
+    width: 100%;
+  }
+  
+  .buttom .send:hover {
+    background-color: #fff;
+    color: #5183fe;
+  }
+
+}

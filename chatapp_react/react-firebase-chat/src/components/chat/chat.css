@@ -259,4 +259,10 @@
             height: 30px;
             cursor: pointer;
           }
+          .mention_sendButton {
+            width: 30px; /* ボタン画像のサイズ */
+            height: 30px;
+            cursor: pointer;
+            position: relative;
+          }
     }
