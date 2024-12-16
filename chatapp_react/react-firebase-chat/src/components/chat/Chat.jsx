@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import AddUser from "./userSelect/useSelect";
 
 const Chat = () =>{
+    const [addUserVisible, setAddUserVisible] = useState(false); // AddUser の表示制御
     const[text,setText]=useState(""); // メッセージ入力欄の状態を管理。デフォルトを空のテキストに
     const[messages, setMessages] = useState([]); // メッセージリストの状態管理。デフォルト空
     const endRef= useRef(null); // メッセージリストの一番下にスクロールするために使用
@@ -114,76 +115,42 @@ const Chat = () =>{
   
 
     return(
-        <div className="chat">
-            <div className="tab-1">
-                <label>
-                    <input type="radio" name="tab-1" defaultChecked />
-                    タブ1
-                </label>
-            
-                <label>
-                    <input type="radio" name="tab-1" />
-                    タブ2
-                </label>
-
-                <label>
-                    <input type="radio" name="tab-1" />
-                    タブ3
-                </label>
-
-            </div>
-
-            <div className="top">
-                <div className="user">
-                    <img src="./avatar.png" alt="" />
-                    <div className="texts">
-                        <span>wada</span>
-                    </div>
-                </div>
-            </div>
-            <div className="center">
-              {renderMessages()} {/* メッセージを表示 */}
-              <div ref={endRef}></div> {/* メッセージの一番下 */}
-              </div>
-            
-            <div className="bottom">
-                {/* <div className="icons">
-                    <img src="./img.png" alt="" />
-                    <img src="./camera.png" alt="" />
-                    <img src="./mic.png" alt="" />
-                </div> */}
-                <input 
-                type="text" 
-                placeholder="Type a message..." 
-                value={text}
-                onChange={e=>setText(e.target.value)}
-                />
-                {/* <div className="emoji">
-                    <img 
-                        src="./emoji.png" 
-                        alt="" 
-                        onClick={()=>setOpen(prev=>!prev)}
-                    />
-                    <div className="picker">
-                        <EmojiPicker open={open} onEmojiClick={handleEmoji}/>
-                    </div>
-                </div> */}
-                <div className="sendButtons">
-                    <img 
-                    src="./send.png"
-                    alt="Send Mention" 
-                    className="sendButton" 
-                    onClick={handleSend} 
-                    />
-                    <img 
-                    src="./send_mention.png" 
-                    alt="Send Message" 
-                    className="sendButton" 
-                    onClick={handleSend} 
-                    />
-                </div>
+    <div className="chat">
+      <div className="tab-1">
+        <label><input type="radio" name="tab-1" defaultChecked />タブ1</label>
+        <label><input type="radio" name="tab-1" />タブ2</label>
+        <label><input type="radio" name="tab-1" />タブ3</label>
+      </div>
+      
+      <div className="top">
+        <div className="user">
+          <img src="./avatar.png" alt="" />
+            <div className="texts">
+              <span>wada</span>
             </div>
         </div>
+      </div>
+      
+      <div className="center">
+        {renderMessages()} {/* メッセージを表示 */}
+        <div ref={endRef}>
+        </div>
+      </div>
+
+      <div className="bottom">
+        <input 
+          type="text" 
+          placeholder="Type a message..." 
+          value={text}
+          onChange={e=>setText(e.target.value)}
+        />
+        <div className="sendButtons">
+          <img src="./send.png" alt="Send Mention" className="sendButton" onClick={handleSend} />
+          <img src="./send_mention.png" alt="Add User" className="mention_sendButton" onClick={() => setAddUserVisible((prev) => !prev)} />
+        </div>
+      </div>
+      {addUserVisible && <AddUser />} {/* AddUser を条件付きで表示 */}
+    </div>
     )
 }
 
