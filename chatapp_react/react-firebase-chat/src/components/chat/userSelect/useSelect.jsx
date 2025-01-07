@@ -1,27 +1,31 @@
 import React, { useState, useEffect } from "react";
 import "./userSelect.css";
 
-const AddUser = ({handleSend}) => {
+const AddUser = ({ handleSend }) => {
   const [users, setUsers] = useState([]); // ユーザー情報を格納する状態
   const [text, setText] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]); // チェックされたユーザーを管理
+
   const onMessageChange = (e) => {
     setText(e.target.value);
-      };
+  };
+
   const onSendMessage = () => {
     if (text.trim() === "") return;
     handleSend(text);
-    setText("");  // メッセージ送信後にテキストをクリア
-    };
+    setText(""); // メッセージ送信後にテキストをクリア
+  };
 
   // バックエンドからユーザーリストを取得する
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/users'); // ユーザー情報を取得するAPI
+        const response = await fetch("http://localhost:3001/api/users"); // ユーザー情報を取得するAPI
         if (response.ok) {
           const data = await response.json();
-          setUsers(data.data); // ユーザー情報をstateに格納
+          // user_id=2（和田）をフィルタリング
+          const filteredUsers = data.data.filter((user) => user.USER_ID === 2);
+          setUsers(filteredUsers); // 和田の情報のみを格納
         } else {
           console.error("ユーザー情報の取得エラー");
         }
@@ -55,7 +59,7 @@ const AddUser = ({handleSend}) => {
               className="checkbox"
               onChange={handleCheckboxChange}
             />
-            <img src={user.ICON_PATH || './default-avatar.png'} alt={user.USER_NAME} />
+            <img src={user.ICON_PATH || "./default-avatar.png"} alt={user.USER_NAME} />
             <span>{user.USER_NAME}</span>
           </label>
         ))}
@@ -68,7 +72,9 @@ const AddUser = ({handleSend}) => {
             <img src="./カレンダー.png" alt="" />
           </button>
         </div>
-        <button className="send" onClick={onSendMessage}>送信</button>
+        <button className="send" onClick={onSendMessage}>
+          送信
+        </button>
       </div>
     </div>
   );
