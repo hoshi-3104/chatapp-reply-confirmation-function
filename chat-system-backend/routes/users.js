@@ -1,31 +1,34 @@
 var express = require('express');
 var db = require('../utils/db'); // データベース接続の設定をインポート
-
 require('dotenv').config();
 
 var app = express();
 
-/**
- * ユーザー取得API
- * 
- * フロントで下記のように記載して呼び出し (ユーザID:1のユーザ情報を取得)
- * var userId = 1;
- * const response = await fetch(`http://localhost:3001/api/users/${userId}`, {
- *     method: 'GET',
- *         headers: {
- *             'Content-Type': 'application/json',
- *         },
- * });
- * 
- * if (!response.ok) {
- *    throw new Error('ネットワークエラー');
- * }
- * // レスポンスをJSON形式に変換
- * const result = await response.json();
- * 
- * // 取得したユーザ名をコンソールに出力（複数データがある場合、data[n]を変動させる）
- * console.log(result.data[0].USER_NAME);
- */
+app.get('/api/users', function(req, res, next) {
+  try {
+    var sql = `
+      SELECT USER_ID, USER_NAME, ICON_PATH
+      FROM USER_MASTER;
+    `;
+
+    db.query(sql, (err, result) => {
+      if (err) {
+        // エラーが発生した場合は、catch (error)の処理に流す
+        throw new Error(err);
+      }
+
+      return res.status(200).json({
+        result_code: 1,
+        message: "ユーザー一覧の取得が成功しました",
+        data: result
+      });
+    });
+  } catch (error) {
+    // 次の処理へ
+    next(error);
+  }
+});
+
 app.get('/api/users/:userId', function(req, res, next) {
   try {
     var sql = `

@@ -3,6 +3,8 @@ import React, { useState, useRef, useEffect } from "react";
 import AddUser from "./userSelect/useSelect";
 
 const Chat = () =>{
+    const [userName, setUserName] = useState(""); // ユーザー名の状態を管理
+    const [toUserName, setToUserName] = useState(""); // 送り先のユーザー名の状態を管理
     const [addUserVisible, setAddUserVisible] = useState(false); // AddUser の表示制御
     const[text,setText]=useState(""); // メッセージ入力欄の状態を管理。デフォルトを空のテキストに
     const[messages, setMessages] = useState([]); // メッセージリストの状態管理。デフォルト空
@@ -73,6 +75,42 @@ const Chat = () =>{
   
   }, [sendUserId,toUserId]);
 
+  useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        const response = await fetch(`http://localhost:3001/api/users/${sendUserId}`);
+        if (response.ok) {
+          const data = await response.json();
+          setUserName(data.data[0].USER_NAME); // ユーザー名をセット
+        } else {
+          console.error("ユーザー名取得エラー");
+        }
+      } catch (error) {
+        console.error("ユーザー名取得中にエラーが発生しました:", error);
+      }
+    };
+
+    fetchUserName();
+  }, [sendUserId]);
+
+  useEffect(() => {
+    const fetchToUserName = async () => {
+      try {
+        const response = await fetch(`http://localhost:3001/api/users/${toUserId}`);
+        if (response.ok) {
+          const data = await response.json();
+          setToUserName(data.data[0].USER_NAME); // ユーザー名をセット
+        } else {
+          console.error("ユーザー名取得エラー");
+        }
+      } catch (error) {
+        console.error("ユーザー名取得中にエラーが発生しました:", error);
+      }
+    };
+
+    fetchToUserName();
+  }, [toUserId]);
+
   // メッセージ表示用のコンポーネントを作成
   const renderMessages = () => {
     return messages.map((message, index) => {
@@ -101,7 +139,7 @@ const Chat = () =>{
           <div key={index} className="message">
             <div className="user">
               <img src="./avatar.png" alt="User Avatar" />
-              <span className="name">和田洸記</span>
+              <span className="name">{toUserName}</span>
               <span className="time">{formattedTime}</span>
             </div>
             <div className="texts">
@@ -126,7 +164,7 @@ const Chat = () =>{
         <div className="user">
           <img src="./avatar.png" alt="" />
             <div className="texts">
-              <span>wada</span>
+              <span>{userName}</span>
             </div>
         </div>
       </div>
@@ -149,7 +187,7 @@ const Chat = () =>{
           <img src="./send_mention.png" alt="Add User" className="mention_sendButton" onClick={() => setAddUserVisible((prev) => !prev)} />
         </div>
       </div>
-      {addUserVisible && <AddUser />} {/* AddUser を条件付きで表示 */}
+      {addUserVisible && <AddUser handleSend={handleSend} />} {/* AddUser を条件付きで表示 */}
     </div>
     )
 }

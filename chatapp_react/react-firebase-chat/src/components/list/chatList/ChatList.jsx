@@ -4,6 +4,9 @@ import AddUser from "./addUser/AddUser";
 
 const ChatList = () => {
     const [addMode, setAddMode] = useState(false);
+    const handleSelectUser = (userId, userName) => {
+        onSelectUser(userId, userName); // 親コンポーネントに選択されたユーザーの情報を渡す
+      };
     return (
         <div className="chatList">
             <div className="member_and_search">
