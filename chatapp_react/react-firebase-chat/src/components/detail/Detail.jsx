@@ -1,6 +1,11 @@
 import "./detail.css"
+import React from "react";
 
-const Detail = () => {
+const Detail = ({setSelectedTab}) => {
+  const handleReplyClick = () => {
+    setSelectedTab("thread1"); // ボタンをクリックしたときに "スレッド1" に切り替える
+  };
+
   return (
     <div className='detail'>
       <div className="response_needed">
@@ -20,23 +25,7 @@ const Detail = () => {
                 <p>hello</p>
             </div>
             <div className="button">
-              <button className="reply">スレッド返信</button>
-              <button className="completion">完 了</button>
-              <span className="limit">期限 : 2024/12/27 12:00</span>
-            </div>
-          </div>
-          
-          <div className="message">
-            <div className="user">
-              <img src="./avatar.png" alt="" />
-              <span className="name">和田洸記</span>
-              <span className="time">12:00</span>
-            </div>      
-            <div className="texts">
-                <p>hello</p>
-            </div>
-            <div className="button">
-              <button className="reply">スレッド返信</button>
+              <button className="reply" onClick={handleReplyClick}>スレッド返信</button>
               <button className="completion">完 了</button>
               <span className="limit">期限 : 2024/12/27 12:00</span>
             </div>
@@ -51,11 +40,27 @@ const Detail = () => {
                 <p>hello</p>
             </div>
             <div className="button">
-              <button className="reply">スレッド返信</button>
+              <button className="reply" onClick={handleReplyClick}>スレッド返信</button>
               <button className="completion">完 了</button>
               <span className="limit">期限 : 2024/12/27 12:00</span>
             </div>
           </div>
+          <div className="message">
+            <div className="user">
+              <img src="./avatar.png" alt="" />
+              <span className="name">和田洸記</span>
+              <span className="time">12:00</span>
+            </div>      
+            <div className="texts">
+                <p>hello</p>
+            </div>
+            <div className="button">
+              <button className="reply" onClick={handleReplyClick}>スレッド返信</button>
+              <button className="completion">完 了</button>
+              <span className="limit">期限 : 2024/12/27 12:00</span>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -103,7 +108,7 @@ const Detail = () => {
               <button className="reply">スレッド返信</button>              
             </div>
           </div>
-          <div className="message">
+          <div className="message completion">
             <div className="user">
               <span className="time">12:00</span>
             </div>      

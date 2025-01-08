@@ -1,12 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./chat.css";
 import AddUser from "./userSelect/userSelect";
+import Detail from "../detail/Detail"; // Detailコンポーネントをインポート
+
 
 const Chat = () => {
   const [open, setOpen] = useState(false);
   const [addUserVisible, setAddUserVisible] = useState(false); // AddUser の表示制御
   const [text, setText] = useState("");
   const [messages, setMessages] = useState([]);
+   // 現在選択されているタブ
   const endRef = useRef(null);
 
   // 初回レンダリング時にデータを取得
@@ -70,52 +73,88 @@ const Chat = () => {
     }
   };
 
+  const [selectedTab, setSelectedTab] = useState("");
+
+  const updateSelectedTab = (tabName) => {
+    setSelectedTab(tabName);
+  };
+
   return (
+    
     <div className="chat">
+      
+      {/* <Detail updateSelectedTab={updateSelectedTab} /> */}
+      <h2>選択されたタブ: {selectedTab}</h2>
+
       <div className="tab-1">
         <label>
-          <input type="radio" name="tab-1" defaultChecked />
-          タブ1
+          <input
+            type="radio"
+            name="tab-1"
+            checked={selectedTab === "chat"}
+            onChange={() => setSelectedTab("chat")}
+          />
+          チャット
         </label>
         <label>
-          <input type="radio" name="tab-1" />
-          タブ2
+          <input
+            type="radio"
+            name="tab-1"
+            checked={selectedTab === "thread1"}
+            onChange={() => setSelectedTab("thread1")}
+          />
+          スレッド1
         </label>
         <label>
-          <input type="radio" name="tab-1" />
-          タブ3
+          <input
+            type="radio"
+            name="tab-1"
+            checked={selectedTab === "thread2"}
+            onChange={() => setSelectedTab("thread2")}
+          />
+          スレッド2
         </label>
       </div>
+      
       <div className="top">
         <div className="user">
           <img src="./avatar.png" alt="User Avatar" />
           <div className="texts">
-            <span>wada</span>
+            <span>Wada</span>
           </div>
         </div>
       </div>
+
       <div className="center">
-        {messages.map((msg, index) => (
-          <div key={index} className={`message ${msg.send_user_id === 1 ? "own" : ""}`}>
-            {msg.send_user_id === 1 ? (
-              <div className="texts">
-                <span>{msg.time}</span>
-                <p>{msg.text}</p>
-              </div>
-            ) : (
-              <>
-                <div className="user">
-                  <img src="./avatar.png" alt="User Avatar" />
-                  <span className="name">和田洸記</span>
-                  <span className="time">{msg.time}</span>
-                </div>
+        {selectedTab === "chat" ? (
+          messages.map((msg, index) => (
+            <div
+              key={index}
+              className={`message ${msg.send_user_id === 1 ? "own" : ""}`}
+            >
+              {msg.send_user_id === 1 ? (
                 <div className="texts">
+                  <span>{msg.time}</span>
                   <p>{msg.text}</p>
                 </div>
-              </>
-            )}
-          </div>
-        ))}
+              ) : (
+                <>
+                  <div className="user">
+                    <img src="./avatar.png" alt="User Avatar" />
+                    <span className="name">和田洸記</span>
+                    <span className="time">{msg.time}</span>
+                  </div>
+                  <div className="texts">
+                    <p>{msg.text}</p>
+                  </div>
+                </>
+              )}
+            </div>
+          ))
+        ) : (
+          <div className="empty-thread">このスレッドにはメッセージはありません。</div>
+        )}
+
         <div ref={endRef}></div>
       </div>
       <div className="bottom">
@@ -140,7 +179,7 @@ const Chat = () => {
           />
         </div>
       </div>
-      {addUserVisible && <AddUser />} {/* AddUser を条件付きで表示 */}
+      {addUserVisible && <AddUser text={text} handleSend={handleSend} />} {/* AddUser を条件付きで表示 */}
     </div>
   );
 };
