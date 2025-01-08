@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./detail.css";
 
-const Detail = ({ userId=2, sendUserId=1 }) => {
+const Detail = ({ userId = 2, sendUserId = 1 }) => {
   const [unrepliedMessages, setUnrepliedMessages] = useState([]); // 未返信リスト
   const [waitingResponseMessages, setWaitingResponseMessages] = useState([]); // 返信待ちリスト
 
@@ -10,7 +10,7 @@ const Detail = ({ userId=2, sendUserId=1 }) => {
     try {
       const response = await fetch(`http://localhost:3001/api/unreplied/${userId}`);
       const data = await response.json();
-      console.log("Unreplied messages:", data);  // データの確認
+      console.log("Unreplied messages:", data); // データの確認
       if (data.result_code === 1) {
         setUnrepliedMessages(data.data);
       }
@@ -29,6 +29,29 @@ const Detail = ({ userId=2, sendUserId=1 }) => {
       }
     } catch (error) {
       console.error("返信待ちメッセージ取得エラー:", error);
+    }
+  };
+
+  // メッセージ完了ボタンの処理
+  const handleComplete = async (messageId) => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/unreplied/${messageId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+      if (data.result_code === 1) {
+        console.log(`Message ${messageId} marked as replied`);
+        // 未返信リストを更新
+        setUnrepliedMessages((prev) => prev.filter((msg) => msg.MESSAGE_ID !== messageId));
+      } else {
+        console.error("完了処理失敗:", data.message);
+      }
+    } catch (error) {
+      console.error("完了処理エラー:", error);
     }
   };
 
@@ -58,7 +81,9 @@ const Detail = ({ userId=2, sendUserId=1 }) => {
               </div>
               <div className="button">
                 <button className="reply">スレッド返信</button>
-                <button className="completion">完 了</button>
+                <button className="completion" onClick={() => handleComplete(data.MESSAGE_ID)}>
+                  完 了
+                </button>
                 <span className="limit">{data.LIMIT_TIME}</span>
               </div>
             </div>
