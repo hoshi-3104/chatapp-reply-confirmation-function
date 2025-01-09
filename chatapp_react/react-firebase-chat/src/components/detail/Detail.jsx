@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import "./detail.css";
 
-const Detail = ({ userId = 2, sendUserId = 1 }) => {
+const Detail = ({ toUserId = 2, sendUserId = 1 }) => {
   const [unrepliedMessages, setUnrepliedMessages] = useState([]); // 未返信リスト
   const [waitingResponseMessages, setWaitingResponseMessages] = useState([]); // 返信待ちリスト
 
   // 未返信メッセージ取得
   const fetchUnrepliedMessages = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/unreplied/${userId}`);
+      const response = await fetch(`http://localhost:3001/api/unreplied/${sendUserId}`);
       const data = await response.json();
       console.log("Unreplied messages:", data); // データの確認
       if (data.result_code === 1) {
-        setUnrepliedMessages(data.data);
+        const filteredMessages = data.data.filter(msg => msg.TO_USER_ID === sendUserId);
+        setUnrepliedMessages(filteredMessages);
       }
     } catch (error) {console.error("未返信メッセージ取得エラー:", error);}
   };
@@ -23,7 +24,8 @@ const Detail = ({ userId = 2, sendUserId = 1 }) => {
       const response = await fetch(`http://localhost:3001/api/waiting_response/${sendUserId}`);
       const data = await response.json();
       if (data.result_code === 1) {
-        setWaitingResponseMessages(data.data);
+        const filteredMessages = data.data.filter(msg => msg.SEND_USER_ID === sendUserId);
+        setWaitingResponseMessages(filteredMessages);
       }
     } catch (error) {console.error("返信待ちメッセージ取得エラー:", error);}
   };
@@ -48,7 +50,7 @@ const Detail = ({ userId = 2, sendUserId = 1 }) => {
   useEffect(() => {
     fetchUnrepliedMessages();
     fetchWaitingResponseMessages();
-  }, [userId, sendUserId]);
+  }, [toUserId, sendUserId]);
 
   return (
     <div className="detail">
