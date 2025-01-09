@@ -7,11 +7,11 @@ app.use(express.json());
 
 //メッセージ送信api（postメソッド）
 app.post('/api/messages', function(req, res, next) {
-  const {messages, to_user_id, send_user_id, thread_id } = req.body;
+  const {messages, to_user_id, send_user_id, thread_id, is_replied } = req.body;
 
   try {
     const sql = `INSERT INTO MESSAGES(MESSAGES, TO_USER_ID, SEND_USER_ID, THREAD_ID, SEEN, IS_REPLIED, SEND_TIME, LIMIT_TIME)
-     VALUES (?, ?, ?, ?,0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);`;
+     VALUES (?, ?, ?, ?,0, ? , CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);`;
     const finalThreadId = thread_id || 0;
     // BODYの値が空でないことを確認
     if (!messages || messages.trim() === "") {
@@ -20,9 +20,11 @@ app.post('/api/messages', function(req, res, next) {
         message: "メッセージ本文が空です。"
       });
     }
+    // is_repliedの値を確認（未設定の場合はデフォルトで0を使用）
+    const finalIsReplied = typeof is_replied !== 'undefined' ? is_replied : 0;
 
     db.query(sql, 
-      [messages, to_user_id, send_user_id, finalThreadId],
+      [messages, to_user_id, send_user_id, finalThreadId, finalIsReplied],
       (err, result) => {
         // エラーが発生した場合は、catch (error)の処理に流す
         if (err) {

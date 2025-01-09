@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./userSelect.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const userSelect = ({ text, handleSend }) => {
   const [showPopup, setShowPopup] = useState(true); // ポップアップ全体の状態
@@ -7,14 +9,13 @@ const userSelect = ({ text, handleSend }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState("");
   const [users, setUsers] = useState([]); // ユーザー情報を格納する状態
-  const [text, setText] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]); // チェックされたユーザーを管理
 
-  const onSendMessage = () => {
-    if (text.trim() === "") return;
-    handleSend(text);
-    setText(""); // メッセージ送信後にテキストをクリア
-  };
+  // const onSendMessage = () => {
+  //   if (text.trim() === "") return;
+  //   handleSend(text);
+  //   setText(""); // メッセージ送信後にテキストをクリア
+  // };
 
   // バックエンドからユーザーリストを取得する
   useEffect(() => {
@@ -46,7 +47,7 @@ const userSelect = ({ text, handleSend }) => {
   const handleCalendarSend = () => {
     // テキストが空でなければ送信
     if (text.trim() !== "") {
-      handleSend(); // 親の送信関数を呼び出す
+      handleSend(0); // 親の送信関数を呼び出す
       setShowPopup(false);
     }
   };
@@ -79,8 +80,10 @@ const userSelect = ({ text, handleSend }) => {
 
 
   return (
-    <div className="userSelect">
-      <div className="user">
+    <>
+    {showPopup && (
+      <div className={`userSelect ${showDatePicker ? "expanded" : ""}`}>
+        <div className="user">
         {users.map((user) => (
           <label key={user.USER_ID} className="checkboxItem">
             <input
@@ -98,15 +101,42 @@ const userSelect = ({ text, handleSend }) => {
       <div className="buttom">
         <div className="addlist-wrapper">
           <button className="addlist">未返信リストに追加</button>
-          <button className="icon-button">
-            <img src="./カレンダー.png" alt="" />
+          <button className="icon-button" onClick={handleCalendarClick}>
+            <img src="./カレンダー.png" alt="カレンダー" />
           </button>
         </div>
-        <button className="send" onClick={onSendMessage}>
-          送信
-        </button>
+        <button onClick={handleCalendarSend} className="send">送信</button>
       </div>
-    </div>
+      {showDatePicker && (
+            <div className="calendar-popup">
+              <h3>返信期限を設定</h3>
+              <DatePicker
+                inline
+                selected={selectedDate}
+                onChange={handleDateChange}
+                dateFormat="yyyy/MM/dd HH:mm"
+              />
+              <div className="time-input">
+                <label>時間を設定：</label>
+                <input
+                  type="time"
+                  value={selectedTime}
+                  onChange={handleTimeChange}
+                />
+              </div>
+              <div className="button-group">
+                <button onClick={handleCalendarSend} className="save-button">
+                  設定して送信
+                </button>
+                <button onClick={handleSettings} className="settings-button">
+                  設定
+                </button>
+              </div>
+            </div>
+          )}
+          </div>
+    )}
+    </>
   );
 };
 

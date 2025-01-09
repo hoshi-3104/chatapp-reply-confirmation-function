@@ -91,7 +91,7 @@ const Detail = ({ userId = 2, sendUserId = 1 }) => {
           {waitingResponseMessages.map((data) => (
             <div className="message" key={data.MESSAGE_ID}>
               <div className="user">
-                <span className="reply_text">返信待ち</span>
+                <span className="reply_text">返信済み</span>
                 <span className="time">{data.SEND_TIME}</span>
               </div>
               <div className="texts">

@@ -15,7 +15,7 @@ const Chat = () =>{
 
 
     //送信ボタン押下時の処理(handleSend)
-    const handleSend = async () => {
+    const handleSend = async (isReplied) => {
       if (text.trim() === "") return; // 空メッセージの送信を防ぐ
       const threadId = 0; // スレッドIDを0に初期化
       const sendTime = (() => { // timestampがsendTimeに渡される
@@ -34,6 +34,7 @@ const Chat = () =>{
               to_user_id: toUserId, // 送信先ID(デフォルトは2)
               messages: text,  // 入力されたメッセージ(送信ボタンを押したときに渡されるもの)
               thread_id: threadId, //デフォルト1
+              is_replied: isReplied,
           }),
         });
         if(response.ok) { // httpコードが200~299の範囲の場合にtrueになることをresponse.okという
@@ -160,11 +161,11 @@ const Chat = () =>{
           onChange={e=>setText(e.target.value)}
         />
         <div className="sendButtons">
-          <img src="./send.png" alt="Send Mention" className="sendButton" onClick={handleSend} />
+          <img src="./send.png" alt="Send Mention" className="sendButton" onClick={() => handleSend(1)} />
           <img src="./send_mention.png" alt="Add User" className="mention_sendButton" onClick={() => setAddUserVisible((prev) => !prev)} />
         </div>
       </div>
-      {addUserVisible && <AddUser handleSend={handleSend} />}
+      {addUserVisible && <AddUser text= {text} handleSend={handleSend} />}
     </div>
     )
 }
