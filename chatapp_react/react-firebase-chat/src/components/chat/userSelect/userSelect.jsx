@@ -3,7 +3,7 @@ import "./userSelect.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const AddUser = ({ text, handleSend }) => {
+const AddUser = ({ text, handleSend, buttonPosition}) => {
   const [showPopup, setShowPopup] = useState(true); // ポップアップ全体の状態
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -11,7 +11,14 @@ const AddUser = ({ text, handleSend }) => {
   const [users, setUsers] = useState([]); // ユーザー情報を格納する状態
   const [selectedUsers, setSelectedUsers] = useState([]); // チェックされたユーザーを管理
   const [limitTime, setLimitTime] = useState(null); // limit_timeの状態を追加
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+  const adjustedTop = buttonPosition.top + buttonPosition.height - (windowHeight > 600 ? 190 : 150);  // 画面の高さが600px以上の場合に調整
+  const adjustedLeft = buttonPosition.left - (windowWidth > 800 ? 290 : 200);  // 画面の幅が800px以上の場合に調整
 
+  const handleClosePopup = () => {
+    setShowPopup(false); // ポップアップを閉じる
+  };
   // バックエンドからユーザーリストを取得する
   useEffect(() => {
     const fetchUsers = async () => {
@@ -41,7 +48,7 @@ const AddUser = ({ text, handleSend }) => {
   };
 
   const handleCalendarClick = () => {
-    setShowDatePicker(true); // カレンダーポップアップを表示
+    setShowDatePicker((prev) => !prev); // 現在の状態を反転させる
   };
 
   const handleDateChange = (date) => {
@@ -88,15 +95,27 @@ const AddUser = ({ text, handleSend }) => {
     // テキストが空でなければ送信
     if (text.trim() !== "") {
       handleSend(0, limitTime); // 親の送信関数を呼び出す
+      console.log("選択された日付:", limitTime);
       setShowPopup(false);
     }
   };
 
 
+
   return (
     <>
     {showPopup && (
-      <div className={`userSelect ${showDatePicker ? "expanded" : ""}`}>
+      <div
+      className={`userSelect ${showDatePicker ? 'expanded' : ''}`}
+      style={{
+        top: adjustedTop,  // 動的に調整された位置
+        left: adjustedLeft,  // 動的に調整された位置
+      }}
+    >
+         {/* ✖ ボタン */}
+        <button className="close-button" onClick={handleClosePopup}>
+          ✖
+        </button>
         <div className="user">
         {users.map((user) => (
           <label key={user.USER_ID} className="checkboxItem">
