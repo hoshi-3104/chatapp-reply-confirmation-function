@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
 import "./userSelect.css";
 
-const userSelect = ({ handleSend }) => {
+const userSelect = ({ text, handleSend }) => {
+  const [showPopup, setShowPopup] = useState(true); // ポップアップ全体の状態
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTime, setSelectedTime] = useState("");
   const [users, setUsers] = useState([]); // ユーザー情報を格納する状態
   const [text, setText] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]); // チェックされたユーザーを管理
+
   const onSendMessage = () => {
     if (text.trim() === "") return;
     handleSend(text);
@@ -38,6 +43,40 @@ const userSelect = ({ handleSend }) => {
       }
     });
   };
+  const handleCalendarSend = () => {
+    // テキストが空でなければ送信
+    if (text.trim() !== "") {
+      handleSend(); // 親の送信関数を呼び出す
+      setShowPopup(false);
+    }
+  };
+
+  const handleCalendarClick = () => {
+    setShowDatePicker(true); // カレンダーポップアップを表示
+  };
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date); // 選択された日付を保存
+  };
+
+  const handleTimeChange = (e) => {
+    setSelectedTime(e.target.value); // 選択された時間を保存
+  };
+
+  const handleSave = () => {
+    console.log("選択された日付:", selectedDate);
+    console.log("選択された時間:", selectedTime);
+    setShowDatePicker(false); // カレンダーポップアップを閉じる
+    setShowPopup(false); // 全体のポップアップも閉じる
+  };
+
+  const handleSettings = () => {
+    console.log("設定ボタンが押されました");
+    console.log("設定された日付:", selectedDate);
+    console.log("設定された時間:", selectedTime);
+    setShowDatePicker(false); // カレンダーポップアップを閉じる
+  };
+
 
   return (
     <div className="userSelect">
@@ -50,7 +89,7 @@ const userSelect = ({ handleSend }) => {
               className="checkbox"
               onChange={handleCheckboxChange}
             />
-            <img src={user.ICON_PATH || "./default-avatar.png"} alt={user.USER_NAME} />
+            <img src={user.ICON_PATH || "./avatar.png"} alt={user.USER_NAME} />
             <span>{user.USER_NAME}</span>
           </label>
         ))}

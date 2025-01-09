@@ -1,6 +1,6 @@
 import "./chat.css"
 import React, { useState, useRef, useEffect } from "react";
-import AddUser from "./userSelect/useSelect";
+import AddUser from "./userSelect/userSelect";
 
 const Chat = () =>{
     const [userName, setUserName] = useState(""); // 送信者ユーザー名の状態を管理
@@ -11,6 +11,8 @@ const Chat = () =>{
     const endRef= useRef(null); // メッセージリストを一番下にスクロールするために使用
     const sendUserId = 1; // サンプルとして固定値。実際にはユーザーIDを使用
     const toUserId = 2;   // 宛先も固定値。実際には動的な値にする
+    const [selectedTab, setSelectedTab] = useState("");
+
 
     //送信ボタン押下時の処理(handleSend)
     const handleSend = async () => {
@@ -130,9 +132,9 @@ const Chat = () =>{
   return(
     <div className="chat">
       <div className="tab-1">
-        <label><input type="radio" name="tab-1" defaultChecked />タブ1</label>
-        <label><input type="radio" name="tab-1" />タブ2</label>
-        <label><input type="radio" name="tab-1" />タブ3</label>
+        <label><input type="radio" name="tab-1" defaultChecked />チャット</label>
+        <label><input type="radio" name="tab-1" />スレッド１</label>
+        <label><input type="radio" name="tab-1" />スレッド２</label>
       </div>
       
       <div className="top">
