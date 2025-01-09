@@ -14,9 +14,7 @@ const Detail = ({ userId = 2, sendUserId = 1 }) => {
       if (data.result_code === 1) {
         setUnrepliedMessages(data.data);
       }
-    } catch (error) {
-      console.error("未返信メッセージ取得エラー:", error);
-    }
+    } catch (error) {console.error("未返信メッセージ取得エラー:", error);}
   };
 
   // 返信待ちメッセージ取得
@@ -27,9 +25,7 @@ const Detail = ({ userId = 2, sendUserId = 1 }) => {
       if (data.result_code === 1) {
         setWaitingResponseMessages(data.data);
       }
-    } catch (error) {
-      console.error("返信待ちメッセージ取得エラー:", error);
-    }
+    } catch (error) {console.error("返信待ちメッセージ取得エラー:", error);}
   };
 
   // メッセージ完了ボタンの処理
@@ -41,20 +37,14 @@ const Detail = ({ userId = 2, sendUserId = 1 }) => {
           "Content-Type": "application/json",
         },
       });
-
       const data = await response.json();
       if (data.result_code === 1) {
         console.log(`Message ${messageId} marked as replied`);
         // 未返信リストを更新
         setUnrepliedMessages((prev) => prev.filter((msg) => msg.MESSAGE_ID !== messageId));
-      } else {
-        console.error("完了処理失敗:", data.message);
-      }
-    } catch (error) {
-      console.error("完了処理エラー:", error);
-    }
+      } else {console.error("完了処理失敗:", data.message);}
+    } catch (error) {console.error("完了処理エラー:", error);}
   };
-
   useEffect(() => {
     fetchUnrepliedMessages();
     fetchWaitingResponseMessages();

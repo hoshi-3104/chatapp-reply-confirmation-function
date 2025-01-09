@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./userSelect.css";
 
-const AddUser = ({ handleSend }) => {
+const userSelect = ({ handleSend }) => {
   const [users, setUsers] = useState([]); // ユーザー情報を格納する状態
   const [text, setText] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]); // チェックされたユーザーを管理
-
-  const onMessageChange = (e) => {
-    setText(e.target.value);
-  };
-
   const onSendMessage = () => {
     if (text.trim() === "") return;
     handleSend(text);
@@ -26,12 +21,8 @@ const AddUser = ({ handleSend }) => {
           // user_id=2（和田）をフィルタリング
           const filteredUsers = data.data.filter((user) => user.USER_ID === 2);
           setUsers(filteredUsers); // 和田の情報のみを格納
-        } else {
-          console.error("ユーザー情報の取得エラー");
-        }
-      } catch (error) {
-        console.error("ユーザー情報取得中にエラーが発生しました:", error);
-      }
+        } else {console.error("ユーザー情報の取得エラー");}
+      } catch (error) {console.error("ユーザー情報取得中にエラーが発生しました:", error);}
     };
     fetchUsers();
   }, []);
@@ -80,4 +71,4 @@ const AddUser = ({ handleSend }) => {
   );
 };
 
-export default AddUser;
+export default userSelect;
