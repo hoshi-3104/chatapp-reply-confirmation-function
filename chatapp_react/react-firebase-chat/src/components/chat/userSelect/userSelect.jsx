@@ -3,19 +3,14 @@ import "./userSelect.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const userSelect = ({ text, handleSend }) => {
+const AddUser = ({ text, handleSend }) => {
   const [showPopup, setShowPopup] = useState(true); // ポップアップ全体の状態
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState("");
   const [users, setUsers] = useState([]); // ユーザー情報を格納する状態
   const [selectedUsers, setSelectedUsers] = useState([]); // チェックされたユーザーを管理
-
-  // const onSendMessage = () => {
-  //   if (text.trim() === "") return;
-  //   handleSend(text);
-  //   setText(""); // メッセージ送信後にテキストをクリア
-  // };
+  const [limitTime, setLimitTime] = useState(null); // limit_timeの状態を追加
 
   // バックエンドからユーザーリストを取得する
   useEffect(() => {
@@ -44,13 +39,6 @@ const userSelect = ({ text, handleSend }) => {
       }
     });
   };
-  const handleCalendarSend = () => {
-    // テキストが空でなければ送信
-    if (text.trim() !== "") {
-      handleSend(0); // 親の送信関数を呼び出す
-      setShowPopup(false);
-    }
-  };
 
   const handleCalendarClick = () => {
     setShowDatePicker(true); // カレンダーポップアップを表示
@@ -64,18 +52,44 @@ const userSelect = ({ text, handleSend }) => {
     setSelectedTime(e.target.value); // 選択された時間を保存
   };
 
-  const handleSave = () => {
-    console.log("選択された日付:", selectedDate);
-    console.log("選択された時間:", selectedTime);
-    setShowDatePicker(false); // カレンダーポップアップを閉じる
-    setShowPopup(false); // 全体のポップアップも閉じる
+  const handleSendWithLimitTime = () => {
+    if (selectedDate && selectedTime) {
+      // 日付と時間を組み合わせてlimit_timeを生成
+      const limitTime = new Date(selectedDate);
+      const [hours, minutes] = selectedTime.split(":");
+      limitTime.setHours(hours);
+      limitTime.setMinutes(minutes);
+      // ISO形式の文字列に変換
+      const limitTimeISO = limitTime.toISOString();
+      setLimitTime(limitTimeISO);
+      // 送信処理（limitTimeを使用して送信）
+      if (text.trim() !== "") {
+        handleSend(0, limitTimeISO); // 親の送信関数を呼び出す
+        setShowPopup(false);
+      }
+    }
   };
 
   const handleSettings = () => {
-    console.log("設定ボタンが押されました");
-    console.log("設定された日付:", selectedDate);
-    console.log("設定された時間:", selectedTime);
+    if (selectedDate && selectedTime) {
+      // 日付と時間を組み合わせてlimit_timeを生成
+      const limitTime = new Date(selectedDate);
+      const [hours, minutes] = selectedTime.split(":");
+      limitTime.setHours(hours);
+      limitTime.setMinutes(minutes);
+
+      // ISO形式の文字列に変換
+      const limitTimeISO = limitTime.toISOString();
+      setLimitTime(limitTimeISO); // limitTimeを保存
+    }
     setShowDatePicker(false); // カレンダーポップアップを閉じる
+  };
+  const handleCalendarSend = () => {
+    // テキストが空でなければ送信
+    if (text.trim() !== "") {
+      handleSend(0, limitTime); // 親の送信関数を呼び出す
+      setShowPopup(false);
+    }
   };
 
 
@@ -125,7 +139,7 @@ const userSelect = ({ text, handleSend }) => {
                 />
               </div>
               <div className="button-group">
-                <button onClick={handleCalendarSend} className="save-button">
+                <button onClick={handleSendWithLimitTime} className="save-button">
                   設定して送信
                 </button>
                 <button onClick={handleSettings} className="settings-button">
@@ -140,4 +154,4 @@ const userSelect = ({ text, handleSend }) => {
   );
 };
 
-export default userSelect;
+export default AddUser;

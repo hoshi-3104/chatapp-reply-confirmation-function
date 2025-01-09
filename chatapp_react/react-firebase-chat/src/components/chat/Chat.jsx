@@ -11,18 +11,13 @@ const Chat = () =>{
     const endRef= useRef(null); // メッセージリストを一番下にスクロールするために使用
     const sendUserId = 1; // サンプルとして固定値。実際にはユーザーIDを使用
     const toUserId = 2;   // 宛先も固定値。実際には動的な値にする
-    const [selectedTab, setSelectedTab] = useState("");
-
+    const limitTime = new Date().toISOString(); // 送信時の現在日時を返信期限として設定
 
     //送信ボタン押下時の処理(handleSend)
-    const handleSend = async (isReplied) => {
+    const handleSend = async (isReplied, limit_time) => {
       if (text.trim() === "") return; // 空メッセージの送信を防ぐ
       const threadId = 0; // スレッドIDを0に初期化
-      const sendTime = (() => { // timestampがsendTimeに渡される
-        const now = new Date();
-        const timestamp = now.toISOString();  // 現在のタイムスタンプ（ISO形式）
-        return timestamp;
-      })();
+      const sendTime = new Date().toISOString();
 
       //API呼び出しでメッセージをデータベースに保存
       try {
@@ -35,6 +30,7 @@ const Chat = () =>{
               messages: text,  // 入力されたメッセージ(送信ボタンを押したときに渡されるもの)
               thread_id: threadId, //デフォルト1
               is_replied: isReplied,
+              limit_time: limitTime,
           }),
         });
         if(response.ok) { // httpコードが200~299の範囲の場合にtrueになることをresponse.okという
@@ -161,7 +157,7 @@ const Chat = () =>{
           onChange={e=>setText(e.target.value)}
         />
         <div className="sendButtons">
-          <img src="./send.png" alt="Send Mention" className="sendButton" onClick={() => handleSend(1)} />
+          <img src="./send.png" alt="Send Mention" className="sendButton" onClick={() => handleSend(1,limitTime)} />
           <img src="./send_mention.png" alt="Add User" className="mention_sendButton" onClick={() => setAddUserVisible((prev) => !prev)} />
         </div>
       </div>
