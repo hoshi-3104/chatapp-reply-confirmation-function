@@ -1,27 +1,46 @@
-.userSelect{
-    z-index: 1000;
-    width: 180px;
-    max-height: 250px; /* スクロール可能な高さを設定 */
-    padding: 10px 10px 0px 10px;
-    background-color: rgb(231, 231, 231);
-    border-radius: 10px;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-    overflow-y: scroll; /* スクロールを有効にするがスクロールバーは非表示にする */
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scrollbar-width: none; /* Firefox */
+.userSelect {
+  z-index: 1000;
+  width: 180px;
+  padding: 10px 10px 0px 10px;
+  background-color: rgba(231, 231, 231, 0.941);
+  border-radius: 10px;
+  position: absolute;
+  /* top: 350px;
+  bottom: 0;
+  left: 350px;
+  right: 0; */
+  margin: auto;
+  overflow-y: visible; /* スクロールを無効化 */
+  max-height: 110px; /* 高さを自動調整 */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 
+
+
+  .close-button {
+    position: absolute;
+    top: 5px;        /* 上から10pxの位置 */
+    right: 10px;       /* 左から10pxの位置 */
+
+    background: transparent;
+    border: none;
+    font-size: 16px;   /* 小さなフォントサイズ */
+    color: rgba(0, 0, 0, 0.5); /* 薄く見せるために半透明 */
+    cursor: pointer;
+    opacity: 0.5;      /* ボタンの透明度を50%に設定 */
+    transition: opacity 0.3s;  /* 透明度の変化にアニメーションを追加 */
+  }
+  
+  .close-button:hover {
+    opacity: 1;  /* ホバー時に完全に表示 */
+  }
         /* ポップアップの基本スタイル */
     .calendar-popup {
-      position: fixed; /* 画面全体に対して固定表示 */
-      top: 60%; /* 画面の縦中央 */
-      left: 71%; /* 画面の横中央 */
+      position: absolute; 
+      top: -80px; /* 親の高さに合わせてその下に配置 */
+      left: 180%; /* 親の幅に合わせてその右側に配置 */
+      
       transform: translate(-50%, -50%); /* 中央に整列 */
-      background-color: rgb(231, 231, 231);
+      background-color: rgba(231, 231, 231, 0.941);
       border: 1px solid #ddd;
       border-radius: 8px;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
@@ -74,10 +93,6 @@
       z-index: 999; /* ポップアップの下に表示 */
     }
 
-
-
-    
-
     .user{
         display: flex;
         align-items: center;
@@ -89,6 +104,7 @@
         align-items: center;
         gap: 5px;
         margin-bottom: -15px;
+        margin-top: 10px;
         padding-bottom: 3px; /* ボーダーとコンテンツの間に余白を追加 */
         width: 100%;
         border-bottom: 1px solid #cbc8c8;

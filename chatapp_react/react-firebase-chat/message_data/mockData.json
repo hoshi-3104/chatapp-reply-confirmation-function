@@ -223,6 +223,48 @@
       "thread_id": 101,
       "text": "あああ",
       "time": "2025/1/8 11:34:27"
+    },
+    {
+      "send_user_id": 1,
+      "to_user_id": 2,
+      "thread_id": 101,
+      "text": "タイピング",
+      "time": "2025/1/9 13:47:09"
+    },
+    {
+      "send_user_id": 1,
+      "to_user_id": 2,
+      "thread_id": 101,
+      "text": "タイピング",
+      "time": "2025/1/9 13:47:16"
+    },
+    {
+      "send_user_id": 1,
+      "to_user_id": 2,
+      "thread_id": 101,
+      "text": "タイピング",
+      "time": "2025/1/9 14:04:34"
+    },
+    {
+      "send_user_id": 1,
+      "to_user_id": 2,
+      "thread_id": 101,
+      "text": "多雨王bbgy",
+      "time": "2025/1/9 14:07:10"
+    },
+    {
+      "send_user_id": 1,
+      "to_user_id": 2,
+      "thread_id": 101,
+      "text": "タイピング",
+      "time": "2025/1/9 14:54:47"
+    },
+    {
+      "send_user_id": 1,
+      "to_user_id": 2,
+      "thread_id": 101,
+      "text": "タイピング",
+      "time": "2025/1/9 14:56:06"
     }
   ]
 }

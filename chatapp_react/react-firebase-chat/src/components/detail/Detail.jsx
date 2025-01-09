@@ -131,4 +131,4 @@ const Detail = ({setSelectedTab}) => {
   )
 }
 
-export default Detail
+export default Detail;

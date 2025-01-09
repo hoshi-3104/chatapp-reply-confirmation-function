@@ -1,5 +1,11 @@
 .detail{
     flex: 1;
+    display: grid;
+    grid-template-rows: 1fr 1fr; /* 2つのセクションに同じ高さを割り当て */
+    height: 100%; /* 親要素の高さに合わせる */
+    max-height: 100vh; /* ビューポートの高さに合わせる */
+    overflow: hidden; /* 画面からはみ出ないようにする */
+    
     .response_needed{
         .title{
             display: flex;
@@ -21,10 +27,10 @@
             max-width: 100%; /* 幅の最大値 */
             box-sizing: border-box;
             margin: 10px; /* 四側面のマージンを10pxに設定 */
-            height: 80%; /* 親要素の高さを引き継ぐ */
+            height: 100%; /* 親要素の高さを引き継ぐ */
             display: flex;
             flex-direction: column; /* アイテムを縦に並べる */
-            max-height: 260px; /* 表示できる最大高さ */
+            max-height: 38vh; /* 表示できる最大高さ */
             overflow-y: auto; /* 高さを超えた場合にスクロール */
             scrollbar-width: none; /* Firefox向け: スクロールバーを非表示 */
           }
@@ -124,11 +130,14 @@
 
 
     .response_waited{
+      max-height: 95%; /* 表示できる最大高さ */
+      height: 95%; /* 親要素の高さを引き継ぐ */
+
       .title{
           display: flex;
           align-items: center;
           gap: 10px;
-          padding: 10px 0px 0px 10px; 
+          padding: 0px 0px 0px 10px; 
           letter-spacing: -0.08em;
   
           img{
@@ -144,10 +153,10 @@
           max-width: 100%; /* 幅の最大値 */
           box-sizing: border-box;
           margin: 10px; /* 四側面のマージンを10pxに設定 */
-          height: 80%; /* 親要素の高さを引き継ぐ */
+          height: 90%; /* 親要素の高さを引き継ぐ */
           display: flex;
           flex-direction: column; /* アイテムを縦に並べる */
-          max-height: 260px; /* 表示できる最大高さ */
+          max-height: 38vh; /* 表示できる最大高さ */
           overflow-y: auto; /* 高さを超えた場合にスクロール */
           scrollbar-width: none; /* Firefox向け: スクロールバーを非表示 */
         }

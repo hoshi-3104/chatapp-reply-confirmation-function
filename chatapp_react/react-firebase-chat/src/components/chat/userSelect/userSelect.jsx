@@ -3,12 +3,20 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./userSelect.css";
 
-const AddUser = ({ text, handleSend }) => {
+const AddUser = ({ text, handleSend, buttonPosition}) => {
   const [showPopup, setShowPopup] = useState(true); // ポップアップ全体の状態
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState("");
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+  const adjustedTop = buttonPosition.top + buttonPosition.height - (windowHeight > 600 ? 190 : 150);  // 画面の高さが600px以上の場合に調整
+  const adjustedLeft = buttonPosition.left - (windowWidth > 800 ? 290 : 200);  // 画面の幅が800px以上の場合に調整
 
+  const handleClosePopup = () => {
+    setShowPopup(false); // ポップアップを閉じる
+  };
+  
   const handleCalendarSend = () => {
     // テキストが空でなければ送信
     if (text.trim() !== "") {
@@ -18,7 +26,7 @@ const AddUser = ({ text, handleSend }) => {
   };
 
   const handleCalendarClick = () => {
-    setShowDatePicker(true); // カレンダーポップアップを表示
+    setShowDatePicker((prev) => !prev); // 現在の状態を反転させる
   };
 
   const handleDateChange = (date) => {
@@ -46,7 +54,18 @@ const AddUser = ({ text, handleSend }) => {
   return (
     <>
       {showPopup && (
-        <div className={`userSelect ${showDatePicker ? "expanded" : ""}`}>
+        <div
+          className={`userSelect ${showDatePicker ? 'expanded' : ''}`}
+          style={{
+            top: adjustedTop,  // 動的に調整された位置
+            left: adjustedLeft,  // 動的に調整された位置
+          }}
+        >
+          {/* ✖ ボタン */}
+          <button className="close-button" onClick={handleClosePopup}>
+            ✖
+          </button>
+
           <div className="user">
             <label className="checkboxItem">
               <input
@@ -58,57 +77,6 @@ const AddUser = ({ text, handleSend }) => {
               <img src="./avatar.png" alt="" />
               <span>user1</span>
             </label>
-            <label className="checkboxItem">
-              <input
-                type="checkbox"
-                name="checkbox"
-                value="和田洸記"
-                className="checkbox"
-              />
-              <img src="./avatar.png" alt="" />
-              <span>user2</span>
-            </label>
-            <label className="checkboxItem">
-              <input
-                type="checkbox"
-                name="checkbox"
-                value="和田洸記"
-                className="checkbox"
-              />
-              <img src="./avatar.png" alt="" />
-              <span>user3</span>
-            </label>
-            <label className="checkboxItem">
-              <input
-                type="checkbox"
-                name="checkbox"
-                value="和田洸記"
-                className="checkbox"
-              />
-              <img src="./avatar.png" alt="" />
-              <span>user4</span>
-            </label>
-            <label className="checkboxItem">
-              <input
-                type="checkbox"
-                name="checkbox"
-                value="和田洸記"
-                className="checkbox"
-              />
-              <img src="./avatar.png" alt="" />
-              <span>user5</span>
-            </label>
-            <label className="checkboxItem">
-              <input
-                type="checkbox"
-                name="checkbox"
-                value="和田洸記"
-                className="checkbox"
-              />
-              <img src="./avatar.png" alt="" />
-              <span>user6</span>
-            </label>
-            {/* 他のユーザー */}
           </div>
 
           <div className="buttom">
