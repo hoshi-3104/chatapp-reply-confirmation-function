@@ -13,7 +13,28 @@ const Chat = () =>{
     const toUserId = 1;   // 宛先も固定値。実際には動的な値にする
     const [buttonPosition, setButtonPosition] = useState(null); // ボタンの位置情報
     const buttonRef = useRef(null); // ボタンの参照
+    const [activeTab, setActiveTab] = useState("chat"); // 'chat' か 'thread1', 'thread2' などの状態を管理
+    const [tabs, setTabs] = useState([{ id: "chat", title: "チャット", messages: [] }]); // タブ一覧
+    const [threadMessages, setThreadMessages] = useState({}); // タブごとのメッセージ
+    const handleTabChange = (tabId) => {
+      setActiveTab(tabId);
+    };
 
+    const handleThreadReply = (message) => {
+      const newTabId = `thread${tabs.length}`;
+      const newTab = {
+          id: newTabId,
+          title: `スレッド${tabs.length}`,
+          messages: [text], // 該当メッセージを新しいタブに紐付け
+      };
+
+      setTabs((prevTabs) => [...prevTabs, newTab]); // 新しいタブを追加
+      setThreadMessages((prevThreadMessages) => ({
+          ...prevThreadMessages,
+          [newTabId]: [text],
+      }));
+      setActiveTab(newTabId);
+    };
     const handleButtonClick = () => {
       setAddUserVisible((prev) => !prev);
   
@@ -110,48 +131,55 @@ const Chat = () =>{
 
   // メッセージ表示
   const renderMessages = () => {
-    return messages.map((message, index) => {
-      const isOwnMessage = message.SEND_USER_ID === sendUserId;
-      const formattedTime = (() => {
-        const date = new Date(message.SEND_TIME); // ISO形式の日付をDateオブジェクトに変換
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        return `${hours}:${minutes}`;
-      })();
-      if (isOwnMessage) {
-        return (
-        <div key={index} className="message own">
-          <div className="texts">
-            <span className="time">{formattedTime}</span>
-            <p>{message.MESSAGES}</p>
-          </div>
-        </div>
-        );
-      } 
-      else {
-        return (
-          <div key={index} className="message">
-            <div className="user">
-              <img src="./avatar.png" alt="User Avatar" />
-              <span className="name">{toUserName}</span>
-              <span className="time">{formattedTime}</span>
-            </div>
+    const currentMessages = activeTab === "chat" ? messages : threadMessages[activeTab] || [];
+      return currentMessages.map((message, index) => {
+        const isOwnMessage = message.SEND_USER_ID === sendUserId;
+        const formattedTime = (() => {
+          const date = new Date(message.SEND_TIME); // ISO形式の日付をDateオブジェクトに変換
+          const hours = String(date.getHours()).padStart(2, '0');
+          const minutes = String(date.getMinutes()).padStart(2, '0');
+          return `${hours}:${minutes}`;
+        })();
+        if (isOwnMessage) {
+          return (
+          <div key={index} className="message own">
             <div className="texts">
+              <span className="time">{formattedTime}</span>
               <p>{message.MESSAGES}</p>
             </div>
           </div>
-        );
-      }
-    });
-  };
+          );
+        } 
+        else {
+          return (
+            <div key={index} className="message">
+              <div className="user">
+                <img src="./avatar.png" alt="User Avatar" />
+                <span className="name">{toUserName}</span>
+                <span className="time">{formattedTime}</span>
+              </div>
+              <div className="texts">
+                <p>{message.MESSAGES}</p>
+              </div>
+            </div>
+          );
+        }
+      });
+     };
+
   return(
     <div className="chat">
       <div className="tab-1">
-        <label><input type="radio" name="tab-1" defaultChecked />チャット</label>
-        <label><input type="radio" name="tab-1" />スレッド１</label>
-        <label><input type="radio" name="tab-1" />スレッド２</label>
+      {tabs.map((tab) => (
+                    <button
+                        key={tab.id}
+                        className={activeTab === tab.id ? "active" : ""}
+                        onClick={() => handleTabChange(tab.id)}
+                    >
+                        {tab.title}
+                    </button>
+                ))}
       </div>
-      
       <div className="top">
         <div className="user">
           <img src="./avatar.png" alt="" />
