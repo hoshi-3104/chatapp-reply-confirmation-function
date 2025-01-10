@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./detail.css";
 
-const Detail = ({ toUserId = 1, sendUserId = 2, onThreadReply }) => {
+const Detail = ({ toUserId = 1, sendUserId = 2 }) => {
   const [unrepliedMessages, setUnrepliedMessages] = useState([]); // 未返信リスト
   const [waitingResponseMessages, setWaitingResponseMessages] = useState([]); // 返信待ちリスト
   const [userName, setUserName] = useState(""); // 送信者ユーザー名の状態を管理
@@ -35,10 +35,6 @@ const Detail = ({ toUserId = 1, sendUserId = 2, onThreadReply }) => {
     };
     fetchToUserName();
   }, [toUserId]);
-
-
-
-
 
   // 未返信メッセージ取得
   const fetchUnrepliedMessages = async () => {
@@ -118,7 +114,7 @@ const Detail = ({ toUserId = 1, sendUserId = 2, onThreadReply }) => {
                 <p>{data.MESSAGES}</p>
               </div>
               <div className="button">
-                <button className="reply" onClick={() => onThreadReply(data)}>スレッド返信</button>
+                <button className="reply">スレッド返信</button>
                 <button className="completion" onClick={() => handleComplete(data.MESSAGE_ID)}>
                   完 了
                 </button>
