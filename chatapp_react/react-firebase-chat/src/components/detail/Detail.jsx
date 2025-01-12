@@ -1,9 +1,14 @@
 import "./detail.css"
 import React from "react";
 
-const Detail = ({setSelectedTab}) => {
+const Detail = ({ onThreadReply }) => {
+
   const handleReplyClick = () => {
-    setSelectedTab("thread1"); // ボタンをクリックしたときに "スレッド1" に切り替える
+    if (!onThreadReply) {
+      console.error("onThreadReply is not defined");
+      return;
+    }
+    onThreadReply(); // 呼び出し部分
   };
 
   return (
@@ -25,7 +30,7 @@ const Detail = ({setSelectedTab}) => {
                 <p>hello</p>
             </div>
             <div className="button">
-              <button className="reply" onClick={handleReplyClick}>スレッド返信</button>
+              <button className="reply" onClick={() => handleReplyClick(1)} >スレッド返信</button>
               <button className="completion">完 了</button>
               <span className="limit">期限 : 2024/12/27 12:00</span>
             </div>
@@ -40,7 +45,7 @@ const Detail = ({setSelectedTab}) => {
                 <p>hello</p>
             </div>
             <div className="button">
-              <button className="reply" onClick={handleReplyClick}>スレッド返信</button>
+              <button className="reply">スレッド返信</button>
               <button className="completion">完 了</button>
               <span className="limit">期限 : 2024/12/27 12:00</span>
             </div>
@@ -55,7 +60,7 @@ const Detail = ({setSelectedTab}) => {
                 <p>hello</p>
             </div>
             <div className="button">
-              <button className="reply" onClick={handleReplyClick}>スレッド返信</button>
+              <button className="reply">スレッド返信</button>
               <button className="completion">完 了</button>
               <span className="limit">期限 : 2024/12/27 12:00</span>
             </div>

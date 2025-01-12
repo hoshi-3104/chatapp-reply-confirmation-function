@@ -9,10 +9,13 @@ const Chat = () => {
   const [addUserVisible, setAddUserVisible] = useState(false); // AddUser の表示制御
   const [text, setText] = useState("");
   const [buttonPosition, setButtonPosition] = useState(null); // ボタンの位置情報
-  const [messages, setMessages] = useState([]);
+
    // 現在選択されているタブ
   const endRef = useRef(null);
   const buttonRef = useRef(null); // ボタンの参照
+  const [selectedTab, setSelectedTab] = useState("thread1");
+  const [messages, setMessages] = useState([]);
+
 
   const handleButtonClick = () => {
     setAddUserVisible((prev) => !prev);
@@ -27,6 +30,13 @@ const Chat = () => {
         height: rect.height,
       });
     }
+  };
+
+  // スレッド返信ボタンがクリックされた時の処理
+  const handleThreadReply = (messageId) => {
+    console.log(`スレッド返信ボタンがクリックされました。メッセージID: ${messageId}`);
+    console.log("Thread reply triggered");
+    // 必要に応じて追加の処理を行います
   };
 
   // 初回レンダリング時にデータを取得
@@ -90,17 +100,12 @@ const Chat = () => {
     }
   };
 
-  const [selectedTab, setSelectedTab] = useState("");
 
-  const updateSelectedTab = (tabName) => {
-    setSelectedTab(tabName);
-  };
+
 
   return (
-    
     <div className="chat">
-      
-      {/* <Detail updateSelectedTab={updateSelectedTab} /> */}
+      <Detail onThreadReply={handleThreadReply} />
       <h2>選択されたタブ: {selectedTab}</h2>
 
       <div className="tab-1">
@@ -143,8 +148,9 @@ const Chat = () => {
       </div>
 
       <div className="center">
-        {selectedTab === "chat" ? (
-          messages.map((msg, index) => (
+      {selectedTab === "chat" ? (
+        <>
+          {messages.map((msg, index) => (
             <div
               key={index}
               className={`message ${msg.send_user_id === 1 ? "own" : ""}`}
@@ -167,44 +173,50 @@ const Chat = () => {
                 </>
               )}
             </div>
-          ))
-        ) : (
-          <div className="empty-thread">このスレッドにはメッセージはありません。</div>
-        )}
+          ))}
+          {/* Detail コンポーネントをメッセージリストの下に表示 */}
+          <Detail onThreadReply={handleThreadReply} />
+          
+        </>
+      ) : (
+        <div className="empty-thread">このスレッドにはメッセージはありません。</div>
+      )}
+      <div ref={endRef}></div>
+      </div>
 
-        <div ref={endRef}></div>
-      </div>
+
+
       <div className="bottom">
-        <input
-          type="text"
-          placeholder="Type a message..."
-          value={text}
-          onChange={(e) => setText(e.target.value)}
+      <input
+        type="text"
+        placeholder="Type a message..."
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
+      <div className="sendButtons">
+        <img
+          src="./send.png"
+          alt="Send"
+          className="sendButton"
+          onClick={handleSend}
+          style={{
+            opacity: text.trim() ? 1 : 0.5, // テキストが入力されていない場合はボタンを半透明に
+            pointerEvents: text.trim() ? 'auto' : 'none', // テキストが入力されていない場合はボタンを無効化
+          }}
         />
-        <div className="sendButtons">
-          <img
-            src="./send.png"
-            alt="Send"
-            className="sendButton"
-            onClick={handleSend}
-            style={{
-              opacity: text.trim() ? 1 : 0.5, // テキストが入力されていない場合はボタンを半透明に
-              pointerEvents: text.trim() ? 'auto' : 'none', // テキストが入力されていない場合はボタンを無効化
-            }}
-          />
-          <img
-            src="./send_mention.png"
-            alt="Add User"
-            className="mention_sendButton"
-            onClick={handleButtonClick}
-            ref={buttonRef} // ボタンの参照を設定
-            style={{
-              opacity: text.trim() ? 1 : 0.5, // テキストが入力されていない場合はボタンを半透明に
-              pointerEvents: text.trim() ? 'auto' : 'none', // テキストが入力されていない場合はボタンを無効化
-            }}
-          />
-        </div>
+        <img
+          src="./send_mention.png"
+          alt="Add User"
+          className="mention_sendButton"
+          onClick={handleButtonClick}
+          ref={buttonRef} // ボタンの参照を設定
+          style={{
+            opacity: text.trim() ? 1 : 0.5, // テキストが入力されていない場合はボタンを半透明に
+            pointerEvents: text.trim() ? 'auto' : 'none', // テキストが入力されていない場合はボタンを無効化
+          }}
+        />
       </div>
+    </div>
       {addUserVisible && buttonPosition && <AddUser text={text} handleSend={handleSend} buttonPosition={buttonPosition}/>} {/* AddUser を条件付きで表示 */}
     </div>
   );
