@@ -1,16 +1,7 @@
 import "./detail.css"
 import React from "react";
 
-const Detail = ({ onThreadReply }) => {
-
-  const handleReplyClick = () => {
-    if (!onThreadReply) {
-      console.error("onThreadReply is not defined");
-      return;
-    }
-    onThreadReply(); // 呼び出し部分
-  };
-
+const Detail = ({ onAddTab }) => {
   return (
     <div className='detail'>
       <div className="response_needed">
@@ -30,7 +21,7 @@ const Detail = ({ onThreadReply }) => {
                 <p>hello</p>
             </div>
             <div className="button">
-              <button className="reply" onClick={() => handleReplyClick(1)} >スレッド返信</button>
+              <button className="reply" onClick={onAddTab}>スレッド返信</button>
               <button className="completion">完 了</button>
               <span className="limit">期限 : 2024/12/27 12:00</span>
             </div>

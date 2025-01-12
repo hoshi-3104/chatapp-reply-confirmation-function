@@ -4,7 +4,7 @@ import AddUser from "./userSelect/userSelect";
 import Detail from "../detail/Detail"; // Detailコンポーネントをインポート
 
 
-const Chat = () => {
+const Chat = ( { tabs, selectedTab, setSelectedTab, onRemoveTab}) => {
   const [open, setOpen] = useState(false);
   const [addUserVisible, setAddUserVisible] = useState(false); // AddUser の表示制御
   const [text, setText] = useState("");
@@ -15,12 +15,16 @@ const Chat = () => {
   const buttonRef = useRef(null); // ボタンの参照
   const [messages, setMessages] = useState([]);
 
-  const [selectedTab, setSelectedTab] = useState("chat");
-  const [tabs, setTabs] = useState([
-    { id: "chat", label: "チャット" },
-    { id: "thread1", label: "スレッド1" },
-    { id: "thread2", label: "スレッド2" },
-  ]);
+  // const [selectedTab, setSelectedTab] = useState("chat");
+  // const [tabs, setTabs] = useState([
+  //   { id: "chat", label: "チャット" },
+  //   { id: "thread1", label: "スレッド1" },
+  //   { id: "thread2", label: "スレッド2" },
+  // ]);
+
+  // const [tabs, setTabs] = useState([{ id: 1, label: "タブ 1" }]);
+  // const [selectedTab, setSelectedTab] = useState(1);
+
 
   const handleAddTab = () => {
     const newTabId = `thread${tabs.length}`;
@@ -29,12 +33,13 @@ const Chat = () => {
     setSelectedTab(newTabId); // 新しいタブを自動で選択
   };
 
-  const handleRemoveTab = (id) => {
-  setTabs((prevTabs) => prevTabs.filter((tab) => tab.id !== id));
-  if (selectedTab === id) {
-    setSelectedTab(tabs[0]?.id || null); // 削除後に最初のタブを選択するか、何も選択しない
-  }
-};
+  const handleAddTabFromChild = (label) => {
+    const newTab = { id: tabs.length + 1, label: label || `スレッド ${tabs.length + 1}` };
+    setTabs((prevTabs) => [...prevTabs, newTab]);
+    setSelectedTab(newTab.id);
+  };
+
+  
 
   const handleButtonClick = () => {
     setAddUserVisible((prev) => !prev);
@@ -134,13 +139,14 @@ const Chat = () => {
               checked={selectedTab === tab.id}
               onChange={() => setSelectedTab(tab.id)}
             />
-            <button onClick={() => handleRemoveTab(tab.id)}>✖</button>
             {tab.label}
+            {selectedTab !== "chat" && tab.id !== "chat" && (
+              <button onClick={() => onRemoveTab(tab.id)}>✖</button>
+            )}
+            
           </label>
         ))}
-        <button onClick={handleAddTab}>新しいタブを追加</button>
-      </div>
-      
+      </div>      
       <div className="top">
         <div className="user">
           <img src="./avatar.png" alt="User Avatar" />
