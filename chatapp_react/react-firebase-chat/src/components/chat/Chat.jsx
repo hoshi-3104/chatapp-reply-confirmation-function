@@ -13,9 +13,28 @@ const Chat = () => {
    // 現在選択されているタブ
   const endRef = useRef(null);
   const buttonRef = useRef(null); // ボタンの参照
-  const [selectedTab, setSelectedTab] = useState("thread1");
   const [messages, setMessages] = useState([]);
 
+  const [selectedTab, setSelectedTab] = useState("chat");
+  const [tabs, setTabs] = useState([
+    { id: "chat", label: "チャット" },
+    { id: "thread1", label: "スレッド1" },
+    { id: "thread2", label: "スレッド2" },
+  ]);
+
+  const handleAddTab = () => {
+    const newTabId = `thread${tabs.length}`;
+    const newTab = { id: newTabId, label: `スレッド${tabs.length}` };
+    setTabs((prevTabs) => [...prevTabs, newTab]);
+    setSelectedTab(newTabId); // 新しいタブを自動で選択
+  };
+
+  const handleRemoveTab = (id) => {
+  setTabs((prevTabs) => prevTabs.filter((tab) => tab.id !== id));
+  if (selectedTab === id) {
+    setSelectedTab(tabs[0]?.id || null); // 削除後に最初のタブを選択するか、何も選択しない
+  }
+};
 
   const handleButtonClick = () => {
     setAddUserVisible((prev) => !prev);
@@ -100,42 +119,26 @@ const Chat = () => {
     }
   };
 
-
-
-
   return (
     <div className="chat">
-      <Detail onThreadReply={handleThreadReply} />
+      {/* <Detail onThreadReply={handleThreadReply} /> */}
       <h2>選択されたタブ: {selectedTab}</h2>
 
+      {/* タブ選択セクション */}
       <div className="tab-1">
-        <label>
-          <input
-            type="radio"
-            name="tab-1"
-            checked={selectedTab === "chat"}
-            onChange={() => setSelectedTab("chat")}
-          />
-          チャット
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="tab-1"
-            checked={selectedTab === "thread1"}
-            onChange={() => setSelectedTab("thread1")}
-          />
-          スレッド1
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="tab-1"
-            checked={selectedTab === "thread2"}
-            onChange={() => setSelectedTab("thread2")}
-          />
-          スレッド2
-        </label>
+        {tabs.map((tab) => (
+          <label key={tab.id}>
+            <input
+              type="radio"
+              name="tab-1"
+              checked={selectedTab === tab.id}
+              onChange={() => setSelectedTab(tab.id)}
+            />
+            <button onClick={() => handleRemoveTab(tab.id)}>✖</button>
+            {tab.label}
+          </label>
+        ))}
+        <button onClick={handleAddTab}>新しいタブを追加</button>
       </div>
       
       <div className="top">
