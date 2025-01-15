@@ -4,7 +4,7 @@ import AddUser from "./userSelect/userSelect";
 import Detail from "../detail/Detail"; // Detailコンポーネントをインポート
 
 
-const Chat = ( { tabs, selectedTab, setSelectedTab, onRemoveTab}) => {
+const Chat = ( { tabs, selectedTab, setSelectedTab, onRemoveTab,username}) => {
   const [open, setOpen] = useState(false);
   const [addUserVisible, setAddUserVisible] = useState(false); // AddUser の表示制御
   const [text, setText] = useState("");
@@ -14,32 +14,6 @@ const Chat = ( { tabs, selectedTab, setSelectedTab, onRemoveTab}) => {
   const endRef = useRef(null);
   const buttonRef = useRef(null); // ボタンの参照
   const [messages, setMessages] = useState([]);
-
-  // const [selectedTab, setSelectedTab] = useState("chat");
-  // const [tabs, setTabs] = useState([
-  //   { id: "chat", label: "チャット" },
-  //   { id: "thread1", label: "スレッド1" },
-  //   { id: "thread2", label: "スレッド2" },
-  // ]);
-
-  // const [tabs, setTabs] = useState([{ id: 1, label: "タブ 1" }]);
-  // const [selectedTab, setSelectedTab] = useState(1);
-
-
-  const handleAddTab = () => {
-    const newTabId = `thread${tabs.length}`;
-    const newTab = { id: newTabId, label: `スレッド${tabs.length}` };
-    setTabs((prevTabs) => [...prevTabs, newTab]);
-    setSelectedTab(newTabId); // 新しいタブを自動で選択
-  };
-
-  const handleAddTabFromChild = (label) => {
-    const newTab = { id: tabs.length + 1, label: label || `スレッド ${tabs.length + 1}` };
-    setTabs((prevTabs) => [...prevTabs, newTab]);
-    setSelectedTab(newTab.id);
-  };
-
-  
 
   const handleButtonClick = () => {
     setAddUserVisible((prev) => !prev);
@@ -126,8 +100,7 @@ const Chat = ( { tabs, selectedTab, setSelectedTab, onRemoveTab}) => {
 
   return (
     <div className="chat">
-      {/* <Detail onThreadReply={handleThreadReply} /> */}
-      <h2>選択されたタブ: {selectedTab}</h2>
+      {/* <h2>選択されたタブ: {selectedTab}</h2> */}
 
       {/* タブ選択セクション */}
       <div className="tab-1">
@@ -140,57 +113,55 @@ const Chat = ( { tabs, selectedTab, setSelectedTab, onRemoveTab}) => {
               onChange={() => setSelectedTab(tab.id)}
             />
             {tab.label}
-            {selectedTab !== "chat" && tab.id !== "chat" && (
+
+            {selectedTab !== "chat" && tab.id !==  "chat" && (
               <button onClick={() => onRemoveTab(tab.id)}>✖</button>
             )}
             
           </label>
         ))}
       </div>      
-      <div className="top">
+      {/* <div className="top">
         <div className="user">
           <img src="./avatar.png" alt="User Avatar" />
           <div className="texts">
             <span>Wada</span>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="center">
-      {selectedTab === "chat" ? (
-        <>
-          {messages.map((msg, index) => (
-            <div
-              key={index}
-              className={`message ${msg.send_user_id === 1 ? "own" : ""}`}
-            >
-              {msg.send_user_id === 1 ? (
-                <div className="texts">
-                  <span>{msg.time}</span>
-                  <p>{msg.text}</p>
-                </div>
-              ) : (
-                <>
-                  <div className="user">
-                    <img src="./avatar.png" alt="User Avatar" />
-                    <span className="name">和田洸記</span>
-                    <span className="time">{msg.time}</span>
-                  </div>
+        {selectedTab === "chat" ? (
+          <>
+            {messages.map((msg, index) => (
+              <div
+                key={index}
+                className={`message ${msg.send_user_id === (username === "Wada" ? 2 : 1) ? "own" : ""}`}
+              >
+                {msg.send_user_id === (username === "Wada" ? 2 : 1) ? (
                   <div className="texts">
+                    <span>{msg.time}</span>
                     <p>{msg.text}</p>
                   </div>
-                </>
-              )}
-            </div>
-          ))}
-          {/* Detail コンポーネントをメッセージリストの下に表示 */}
-          <Detail onThreadReply={handleThreadReply} />
-          
-        </>
-      ) : (
-        <div className="empty-thread">このスレッドにはメッセージはありません。</div>
-      )}
-      <div ref={endRef}></div>
+                ) : (
+                  <>
+                    <div className="user">
+                      <img src="./avatar.png" alt="User Avatar" />
+                      <span className="name">{username === "Wada" ? "Hoshino" : "Wada"}</span>
+                      <span className="time">{msg.time}</span>
+                    </div>
+                    <div className="texts">
+                      <p>{msg.text}</p>
+                    </div>
+                  </>
+                )}
+              </div>
+            ))}
+          </>
+        ) : (
+          <div className="empty-thread">このスレッドにはメッセージはありません。</div>
+        )}
+        <div ref={endRef}></div>
       </div>
 
 

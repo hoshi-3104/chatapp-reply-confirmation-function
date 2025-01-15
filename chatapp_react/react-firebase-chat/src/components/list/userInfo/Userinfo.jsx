@@ -1,11 +1,11 @@
 import "./userInfo.css"
 
-const Userinfo = () => {
+const Userinfo = ({username}) => {
   return (
     <div className='userInfo'>
         <div className="user">
             <img src="./avatar.png" alt="" />
-            <h2>Yamada</h2>
+            <h2>{username}</h2>
         </div>
         <div className="icons">
             {/* <img src="./more.png" alt="" />

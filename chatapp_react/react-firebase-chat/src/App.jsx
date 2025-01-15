@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import Detail from "./components/detail/Detail";
 import List from "./components/list/list";
 import Chat from "./components/chat/Chat";
+import Login from './components/login/Login';
 
 const App = () => {
     const [tabs, setTabs] = useState([
     { id: "chat", label: "チャット" },
   ]);
-  const [selectedTab, setSelectedTab] = useState(1);
+  const [selectedTab, setSelectedTab] = useState("chat");
 
   // 新しいタブを追加する関数
   const handleAddTab = () => {
@@ -23,16 +24,31 @@ const App = () => {
     }
   };
 
+  // const user = true
+  const [user, setUser] = useState(false); // user 状態を追加
+  const [username, setUsername] = useState(''); // username 状態を追加
+
   return (
     <div className='container'>
-      <List />
-      <Chat 
-      tabs={tabs} 
-      selectedTab={selectedTab} 
-      setSelectedTab={setSelectedTab} 
-      onRemoveTab={handleRemoveTab}/>
-      {/* handleAddTab を Detail に渡す */}
-      <Detail onAddTab={handleAddTab} />
+      {
+        user ? (
+        <>
+          <List 
+          username={username}/>
+          <Chat 
+          tabs={tabs} 
+          selectedTab={selectedTab} 
+          setSelectedTab={setSelectedTab} 
+          onRemoveTab={handleRemoveTab}
+          username={username}/>
+          <Detail onAddTab={handleAddTab} />
+        </>
+        ) : (
+        <Login 
+        setUser={setUser}
+        setUsername={setUsername} /> )
+      }
+      
     </div>
   );
 };
