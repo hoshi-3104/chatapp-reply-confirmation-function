@@ -1,8 +1,9 @@
 import "./chat.css"
 import React, { useState, useRef, useEffect } from "react";
 import AddUser from "./userSelect/userSelect";
+import Detail from "../detail/Detail"; // Detailコンポーネントをインポート
 
-const Chat = () =>{
+const Chat = ({ tabs, selectedTab, setSelectedTab, onRemoveTab}) =>{
     const [userName, setUserName] = useState(""); // 送信者ユーザー名の状態を管理
     const [toUserName, setToUserName] = useState(""); // 送り先ユーザー名の状態を管理
     const [addUserVisible, setAddUserVisible] = useState(false); // AddUser の表示制御
@@ -13,9 +14,9 @@ const Chat = () =>{
     const toUserId = 1;   // 宛先も固定値。実際には動的な値にする
     const [buttonPosition, setButtonPosition] = useState(null); // ボタンの位置情報
     const buttonRef = useRef(null); // ボタンの参照
+    const limit_time = null;
     const handleButtonClick = () => {
       setAddUserVisible((prev) => !prev);
-  
       // ボタンの位置を取得して state に保存
       if (buttonRef.current) {
         const rect = buttonRef.current.getBoundingClientRect();
@@ -27,6 +28,12 @@ const Chat = () =>{
         });
       }
     };
+    // スレッド返信ボタンがクリックされた時の処理
+    const handleThreadReply = (messageId) => {
+      console.log(`スレッド返信ボタンがクリックされました。メッセージID: ${messageId}`);
+      console.log("Thread reply triggered");
+    };
+
     //送信ボタン押下時の処理(handleSend)
     const handleSend = async (isReplied, limit_time) => {
       if (text.trim() === "") return; // 空メッセージの送信を防ぐ
@@ -107,62 +114,63 @@ const Chat = () =>{
     fetchToUserName();
   }, [toUserId]);
 
-  // メッセージ表示
-  const renderMessages = () => {
+     const renderMessages = () => {
       return messages.map((message, index) => {
         const isOwnMessage = message.SEND_USER_ID === sendUserId;
         const formattedTime = (() => {
           const date = new Date(message.SEND_TIME); // ISO形式の日付をDateオブジェクトに変換
-          const hours = String(date.getHours()).padStart(2, '0');
-          const minutes = String(date.getMinutes()).padStart(2, '0');
-          return `${hours}:${minutes}`;
+          return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
         })();
-        if (isOwnMessage) {
-          return (
-          <div key={index} className="message own">
-            <div className="texts">
-              <span className="time">{formattedTime}</span>
-              <p>{message.MESSAGES}</p>
-            </div>
-          </div>
-          );
-        } 
-        else {
-          return (
-            <div key={index} className="message">
-              <div className="user">
-                <img src="./avatar.png" alt="User Avatar" />
-                <span className="name">{toUserName}</span>
-                <span className="time">{formattedTime}</span>
-              </div>
+    
+        return (
+          <div
+            key={index}
+            className={`message ${isOwnMessage ? "own" : ""}`}
+          >
+            {isOwnMessage ? (
               <div className="texts">
+                <span className="time">{formattedTime}</span>
                 <p>{message.MESSAGES}</p>
               </div>
-            </div>
-          );
-        }
+            ) : (
+              <>
+                <div className="user">
+                  <img src="./avatar.png" alt="User Avatar" />
+                  <span className="name">{toUserName}</span>
+                  <span className="time">{formattedTime}</span>
+                </div>
+                <div className="texts">
+                  <p>{message.MESSAGES}</p>
+                </div>
+              </>
+            )}
+          </div>
+        );
       });
-     };
+    };
 
   return(
     <div className="chat">
-      <div className="tab-1">
-    <label>
-        <input type="radio" name="tab-1" defaultChecked />
-        chat
-    </label>
+     <h2>選択されたタブ: {selectedTab}</h2>
 
-    <label>
-        <input type="radio" name="tab-1" />
-        タブ1
-    </label>
+     {/* タブ選択セクション */}
+     <div className="tab-1">
+        {tabs.map((tab) => (
+          <label key={tab.id}>
+            <input
+              type="radio"
+              name="tab-1"
+              checked={selectedTab === tab.id}
+              onChange={() => setSelectedTab(tab.id)}
+            />
+            {tab.label}
+            {selectedTab !== "chat" && tab.id !== "chat" && (
+              <button onClick={() => onRemoveTab(tab.id)}>✖</button>
+            )}
+          </label>
+        ))}
+      </div>
 
-    <label>
-        <input type="radio" name="tab-1" />
-        タブ2
-    </label>
-
-</div>
       <div className="top">
         <div className="user">
           <img src="./avatar.png" alt="" />
@@ -173,7 +181,7 @@ const Chat = () =>{
       </div>
       
       <div className="center">
-        {renderMessages()} {/* メッセージを表示 */}
+          {renderMessages()} {/* メッセージを表示 */}
         <div ref={endRef}>
         </div>
       </div>
@@ -190,7 +198,7 @@ const Chat = () =>{
             src="./send.png"
             alt="Send"
             className="sendButton"
-            onClick={() => handleSend(1,limitTime)}
+            onClick={() => handleSend(1,limit_time)}
             style={{
               opacity: text.trim() ? 1 : 0.5, // テキストが入力されていない場合はボタンを半透明に
               pointerEvents: text.trim() ? 'auto' : 'none', // テキストが入力されていない場合はボタンを無効化

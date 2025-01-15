@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./detail.css";
 
-const Detail = ({ toUserId = 1, sendUserId = 2 }) => {
+const Detail = ({onAddTab}) => {   
+  const toUserId = 1;
+  const sendUserId = 2;
   const [unrepliedMessages, setUnrepliedMessages] = useState([]); // 未返信リスト
   const [waitingResponseMessages, setWaitingResponseMessages] = useState([]); // 返信待ちリスト
   const [userName, setUserName] = useState(""); // 送信者ユーザー名の状態を管理
@@ -114,7 +116,7 @@ const Detail = ({ toUserId = 1, sendUserId = 2 }) => {
                 <p>{data.MESSAGES}</p>
               </div>
               <div className="button">
-                <button className="reply">スレッド返信</button>
+                <button className="reply" onClick={() =>onAddTab(data.MESSAGE_ID)} >スレッド返信</button>
                 <button className="completion" onClick={() => handleComplete(data.MESSAGE_ID)}>
                   完 了
                 </button>

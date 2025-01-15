@@ -1,33 +1,56 @@
 var express = require('express');
 var db = require('../utils/db'); // データベース接続の設定をインポート
-const bodyParser = require('body-parser');
 
 require('dotenv').config();
 
 var app = express();
-// json形式できたパラメータを変換
-app.use(express.json());
 
-app.post('/api/threads', function(req, res, next) {
-    try {
-      var sql = `INSERT INTO THREAD(parent_message_id) VALUES (?);`;
+app.put('/api/threads/:messageId', function (req, res, next) {
+  const messageId = req.params.messageId;
+  const { threadId } = req.body; // リクエストボディから thread_id を取得
+
+  // 現在の thread_id を取得
+  const checkSql = `SELECT THREAD_ID FROM MESSAGES WHERE MESSAGE_ID = ?`;
   
-      db.query(sql, 
-        [req.body.parent_message_id],
-        (err, result) => {
-          // エラーが発生した場合は、catch (error)の処理に流す
-          if (err) {
-            throw new Error(err);
-          }
-  
-        return res.status(200).json({
+  db.query(checkSql, [messageId], function (err, results) {
+    if (err) {
+      console.error("データベースエラー:", err);
+      return next(err);
+    }
+
+    // thread_id が 0 の場合のみ更新する
+    if (results.length > 0 && results[0].THREAD_ID === 0) {
+      const sql = `
+        UPDATE MESSAGES
+        SET THREAD_ID = ?
+        WHERE MESSAGE_ID = ?
+      `;
+      
+      db.query(sql, [threadId, messageId], function (err, results) {
+        if (err) {
+          console.error("データベースエラー:", err);
+          return next(err);
+        }
+
+        if (results.affectedRows === 1) {
+          res.status(200).json({
             result_code: 1,
-            message: "スレッドが追加されました。"
-        });
+            message: "スレッドID更新成功",
+          });
+        } else {
+          res.status(400).json({
+            result_code: 0,
+            message: "スレッドID更新失敗",
+          });
+        }
       });
-    } catch (error) {
-      // 次の処理へ
-      next(error);
+    } else {
+      res.status(400).json({
+        result_code: 0,
+        message: "thread_id は 0 の場合のみ更新できます",
+      });
     }
   });
-  module.exports = app;
+});
+
+module.exports = app;
