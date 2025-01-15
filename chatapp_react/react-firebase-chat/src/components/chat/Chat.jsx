@@ -164,7 +164,7 @@ const Chat = ({ tabs, selectedTab, setSelectedTab, onRemoveTab}) =>{
               onChange={() => setSelectedTab(tab.id)}
             />
             {tab.label}
-            {selectedTab !== "chat" && tab.id !== "chat" && (
+            {selectedTab !== 'chat' && tab.id !=='chat' && (
               <button onClick={() => onRemoveTab(tab.id)}>✖</button>
             )}
           </label>

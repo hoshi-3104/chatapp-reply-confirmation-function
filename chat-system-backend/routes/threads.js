@@ -19,7 +19,7 @@ app.put('/api/threads/:messageId', function (req, res, next) {
     }
 
     // thread_id が 0 の場合のみ更新する
-    if (results.length > 0 && results[0].THREAD_ID === 0) {
+    if (results.length > 0) {
       const sql = `
         UPDATE MESSAGES
         SET THREAD_ID = ?

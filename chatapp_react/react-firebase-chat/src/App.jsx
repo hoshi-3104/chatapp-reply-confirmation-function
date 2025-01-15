@@ -8,11 +8,11 @@ const App = () => {
     { id: "chat", label: "チャット" },
   ]);
   const [selectedTab, setSelectedTab] = useState("chat");
-
   // 新しいタブを追加する関数
   const handleAddTab = async(messageId) => {
+    console.log("メッセージID:", messageId)
     const newTabId = tabs.length;
-    const newTab = { id: newTabId , label: `タブ ${newTabId}` };
+    const newTab = { id: newTabId , label: `タブ ${newTabId}` , messageId};
     try {
       // スレッド ID を更新する API を呼び出し
       const response = await fetch(`http://localhost:3001/api/threads/${messageId}`, {
@@ -39,12 +39,45 @@ const App = () => {
     }
   };
 
-   const handleRemoveTab = (id) => {
-     setTabs((prevTabs) => prevTabs.filter((tab) => tab.id !== id));
-    if (selectedTab === id) {
-       setSelectedTab(tabs[0]?.id || null); // 削除後に最初のタブを選択するか、何も選択しない
-     }
-   };
+  const handleRemoveTab = async (id) => {
+    try {
+      const tabToRemove = tabs.find((tab) => tab.id === id); // 対応するタブを取得
+      let messageId = null;
+        if (tabToRemove) {
+          messageId = tabToRemove.messageId; // 削除するタブに対応するメッセージIDを取得
+          console.log("削除するタブの対応メッセージID:", messageId);
+        };
+      // スレッドIDをデフォルト（0）に戻すAPIを呼び出し
+      const response = await fetch(`http://localhost:3001/api/threads/${messageId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ threadId: 0 }), // thread_id を 0 に戻す
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP エラー: ${response.status}`);
+      }
+  
+      const result = await response.json();
+      if (result.result_code === 1) {
+        console.log("スレッドIDリセット成功:", result.message);
+  
+        // タブを削除
+        setTabs((prevTabs) => prevTabs.filter((tab) => tab.id !== id));
+  
+        // 削除されたタブが選択されていた場合、最初のタブを選択または何も選択しない
+        if (selectedTab === id) {
+          setSelectedTab(tabs[0]?.id || null);
+        }
+      } else {
+        console.error("スレッドIDリセット失敗:", result.message);
+      }
+    } catch (error) {
+      console.error("API エラー:", error);
+    }
+  };
 
 
   return (
