@@ -60,12 +60,12 @@ const Chat = ( { tabs, selectedTab, setSelectedTab, onRemoveTab,username}) => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSend = async () => {
+  const handleSend = async (username) => {
     if (text.trim() === "") return;
 
     try {
-      const sendUserId = 1; // 固定値
-      const toUserId = 2;
+      const sendUserId = username === "Wada" ? 2 : 1;
+      const toUserId = username === "Wada" ? 1 : 2;
       const threadId = 101;
 
       const newMessage = {
@@ -178,7 +178,7 @@ const Chat = ( { tabs, selectedTab, setSelectedTab, onRemoveTab,username}) => {
           src="./send.png"
           alt="Send"
           className="sendButton"
-          onClick={handleSend}
+          onClick={() => handleSend(username)}
           style={{
             opacity: text.trim() ? 1 : 0.5, // テキストが入力されていない場合はボタンを半透明に
             pointerEvents: text.trim() ? 'auto' : 'none', // テキストが入力されていない場合はボタンを無効化
