@@ -50,16 +50,7 @@ const App = () => {
     } catch (error) {
       console.error("API エラー:", error);
     }
-    // const messageResponse = await fetch(`http://localhost:3001/api/messages/${messageId}`);
-    //  if (!messageResponse.ok) {
-    //   throw new Error(`メッセージ取得エラー: ${messageResponse.status}`);
-    // }
-    // const messageData = await messageResponse.json();
-    // if (messageData.result_code === 1 && messageData.messages.length > 0) {
-    //   const messages = messageData.messages[0];  // 最初のメッセージを取得
-    //   console.log("取得したメッセージ:", messages);
-    //    setMessages((prevMessages) => [...prevMessages, messages]);
-    // }
+    window.location.reload();
   };
 
   const handleRemoveTab = async (id) => {
