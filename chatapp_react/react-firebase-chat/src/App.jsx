@@ -1,17 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Detail from "./components/detail/Detail";
 import List from "./components/list/list";
 import Chat from "./components/chat/Chat";
 
 const App = () => {
-    const [tabs, setTabs] = useState([
-    { id: "chat", label: "チャット" },
-  ]);
+  // const [messages, setMessages] = useState([]);
+  const initialTabs = [{ id: "chat", label: "チャット" }];
   const [selectedTab, setSelectedTab] = useState("chat");
+   const [tabs, setTabs] = useState(() => {
+     const savedTabs = JSON.parse(localStorage.getItem("tabs"));
+     return savedTabs || initialTabs; // 保存されていなければ初期値を使用
+   });
+  useEffect(() => {
+    // タブが変更されるたびにローカルストレージに保存
+    if (tabs.length > 0) {
+      localStorage.setItem("tabs", JSON.stringify(tabs));
+    }
+  }, [tabs]);
   // 新しいタブを追加する関数
   const handleAddTab = async(messageId) => {
     console.log("メッセージID:", messageId)
-    const newTabId = tabs.length;
+    //const newTabId = tabs.length;
+    const newTabId = tabs.length > 0 
+    ? Math.max(...tabs.map(tab => !isNaN(Number(tab.id)) ? Number(tab.id) : 0), 0) + 1
+    : 1; // 最初のタブの場合は 1
+    console.log(newTabId)
     const newTab = { id: newTabId , label: `タブ ${newTabId}` , messageId};
     try {
       // スレッド ID を更新する API を呼び出し
@@ -37,6 +50,16 @@ const App = () => {
     } catch (error) {
       console.error("API エラー:", error);
     }
+    // const messageResponse = await fetch(`http://localhost:3001/api/messages/${messageId}`);
+    //  if (!messageResponse.ok) {
+    //   throw new Error(`メッセージ取得エラー: ${messageResponse.status}`);
+    // }
+    // const messageData = await messageResponse.json();
+    // if (messageData.result_code === 1 && messageData.messages.length > 0) {
+    //   const messages = messageData.messages[0];  // 最初のメッセージを取得
+    //   console.log("取得したメッセージ:", messages);
+    //    setMessages((prevMessages) => [...prevMessages, messages]);
+    // }
   };
 
   const handleRemoveTab = async (id) => {

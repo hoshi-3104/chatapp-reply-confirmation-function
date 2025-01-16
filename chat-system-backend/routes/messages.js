@@ -83,5 +83,48 @@ app.get('/api/messages', function(req, res, next) {
     next(error);
   }
 });
+app.get('/api/messages/:message_id', function(req, res, next) {
+  try {
+    const { message_id } = req.params;  // URLパラメータからmessage_idを取得
+
+    // message_idが指定されていない場合のエラーハンドリング
+    if (!message_id) {
+      return res.status(400).json({
+        result_code: 0,
+        message: "メッセージIDが指定されていません。"
+      });
+    }
+
+    // SQLクエリの構築
+    const sql = `
+      SELECT MESSAGE_ID, MESSAGES, TO_USER_ID, SEND_USER_ID, THREAD_ID, SEEN, IS_REPLIED, SEND_TIME, LIMIT_TIME
+      FROM MESSAGES
+      WHERE MESSAGE_ID = ?
+    `;
+
+    // message_idでメッセージを取得
+    db.query(sql, [message_id], (err, result) => {
+      if (err) {
+        return res.status(500).json({ result_code: 0, message: "データベースエラー" });
+      }
+      
+      // メッセージが見つからなかった場合
+      if (result.length === 0) {
+        return res.status(404).json({
+          result_code: 0,
+          message: "指定されたメッセージは存在しません。"
+        });
+      }
+
+      // メッセージを正常に取得した場合
+      return res.status(200).json({
+        result_code: 1,
+        messages: result
+      });
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = app;
