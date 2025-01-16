@@ -5,6 +5,35 @@ require('dotenv').config();
 
 var app = express();
 
+
+app.put('/api/unreplied/:messageId', function (req, res, next) {
+  const messageId = req.params.messageId;
+
+  const sql = `
+    UPDATE MESSAGES
+    SET IS_REPLIED = 1
+    WHERE MESSAGE_ID = ?
+  `;
+
+  db.query(sql, [messageId], function (err, results) {
+    if (err) {
+      console.error("データベースエラー:", err);
+      return next(err);
+    }
+
+    if (results.affectedRows === 1) {
+      res.status(200).json({
+        result_code: 1,
+        message: "メッセージが既読としてマークされました。",
+      });
+    } else {
+      res.status(400).json({
+        result_code: 0,
+        message: "メッセージの更新に失敗しました。",
+      });
+    }
+  });
+});
 // 未返信リスト取得API
 app.get('/api/unreplied/:userId', function (req, res, next) {
     // ユーザーIDを取得
@@ -38,5 +67,6 @@ app.get('/api/unreplied/:userId', function (req, res, next) {
       });
     });
   });
+
 
   module.exports = app;

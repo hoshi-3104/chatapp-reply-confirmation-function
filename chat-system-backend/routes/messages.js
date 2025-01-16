@@ -7,11 +7,11 @@ app.use(express.json());
 
 //メッセージ送信api（postメソッド）
 app.post('/api/messages', function(req, res, next) {
-  const {messages, to_user_id, send_user_id, thread_id } = req.body;
+  const {messages, to_user_id, send_user_id, thread_id, is_replied, limit_time} = req.body;
 
   try {
     const sql = `INSERT INTO MESSAGES(MESSAGES, TO_USER_ID, SEND_USER_ID, THREAD_ID, SEEN, IS_REPLIED, SEND_TIME, LIMIT_TIME)
-     VALUES (?, ?, ?, ?,0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);`;
+     VALUES (?, ?, ?, ?,0, ? , CURRENT_TIMESTAMP, ?);`;
     const finalThreadId = thread_id || 0;
     // BODYの値が空でないことを確認
     if (!messages || messages.trim() === "") {
@@ -20,9 +20,12 @@ app.post('/api/messages', function(req, res, next) {
         message: "メッセージ本文が空です。"
       });
     }
+    // is_repliedの値を確認（未設定の場合はデフォルトで0を使用）
+    const finalIsReplied = typeof is_replied !== 'undefined' ? is_replied : 0;
 
+    const finalLimitTime = limit_time || new Date().toISOString();  // limit_timeが空なら現在の日時を設定
     db.query(sql, 
-      [messages, to_user_id, send_user_id, finalThreadId],
+      [messages, to_user_id, send_user_id, finalThreadId, finalIsReplied, finalLimitTime],
       (err, result) => {
         // エラーが発生した場合は、catch (error)の処理に流す
         if (err) {
@@ -80,136 +83,48 @@ app.get('/api/messages', function(req, res, next) {
     next(error);
   }
 });
+app.get('/api/messages/:message_id', function(req, res, next) {
+  try {
+    const { message_id } = req.params;  // URLパラメータからmessage_idを取得
 
-module.exports = app;
+    // message_idが指定されていない場合のエラーハンドリング
+    if (!message_id) {
+      return res.status(400).json({
+        result_code: 0,
+        message: "メッセージIDが指定されていません。"
+      });
+    }
 
+    // SQLクエリの構築
+    const sql = `
+      SELECT MESSAGE_ID, MESSAGES, TO_USER_ID, SEND_USER_ID, THREAD_ID, SEEN, IS_REPLIED, SEND_TIME, LIMIT_TIME
+      FROM MESSAGES
+      WHERE MESSAGE_ID = ?
+    `;
 
+    // message_idでメッセージを取得
+    db.query(sql, [message_id], (err, result) => {
+      if (err) {
+        return res.status(500).json({ result_code: 0, message: "データベースエラー" });
+      }
+      
+      // メッセージが見つからなかった場合
+      if (result.length === 0) {
+        return res.status(404).json({
+          result_code: 0,
+          message: "指定されたメッセージは存在しません。"
+        });
+      }
 
-
-
-
-
-var express = require('express');
-var db = require('../utils/db'); // データベース接続の設定をインポート
-require('dotenv').config();
-
-var app = express();
-app.use(express.json());
-
-// メッセージ送信API（メンション対応）
-app.post('/api/messages', function (req, res, next) {
- const { messages, to_user_id, send_user_id, thread_id, mention_user_ids } = req.body;
-
- // SQLクエリ: メッセージを挿入
- const insertMessageSql = `
-   INSERT INTO MESSAGES (
-     MESSAGES, 
-     TO_USER_ID, 
-     SEND_USER_ID, 
-     THREAD_ID, 
-     SEEN, 
-     IS_REPLIED, 
-     SEND_TIME, 
-     LIMIT_TIME
-   ) VALUES (?, ?, ?, ?, 0, 0, CURRENT_TIMESTAMP, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 DAY));
- `;
-
- // SQLクエリ: メンション情報を挿入
- const insertMentionSql = `
-   INSERT INTO MENTION (
-     mention_message_id, 
-     to_mention_user_id
-   ) VALUES (?, ?);
- `;
-
- // 入力検証
- if (!messages || messages.trim() === "") {
-   return res.status(400).json({
-     result_code: 0,
-     message: "メッセージ本文が空です。"
-   });
- }
-
- // トランザクションを開始
- db.beginTransaction(function (err) {
-   if (err) return next(err);
-
-   // MESSAGESテーブルにメッセージを挿入
-   db.query(insertMessageSql, [messages, to_user_id, send_user_id, thread_id || 0], function (err, result) {
-     if (err) {
-       return db.rollback(function () {
-         return res.status(500).json({
-           result_code: 0,
-           message: "メッセージの送信に失敗しました。"
-         });
-       });
-     }
-
-     const insertedMessageId = result.insertId;
-
-     // メンションがある場合、MENTIONテーブルに挿入
-     if (mention_user_ids && Array.isArray(mention_user_ids) && mention_user_ids.length > 0) {
-       const mentionPromises = mention_user_ids.map((mentionUserId) => {
-         return new Promise((resolve, reject) => {
-           db.query(insertMentionSql, [insertedMessageId, mentionUserId], function (err) {
-             if (err) return reject(err);
-             resolve();
-           });
-         });
-       });
-
-       // 全てのメンション挿入クエリが成功したか確認
-       Promise.all(mentionPromises)
-         .then(() => {
-           // コミットして完了
-           db.commit(function (err) {
-             if (err) {
-               return db.rollback(function () {
-                 return res.status(500).json({
-                   result_code: 0,
-                   message: "トランザクションのコミットに失敗しました。"
-                 });
-               });
-             }
-
-             return res.status(200).json({
-               result_code: 1,
-               message: "メッセージとメンションが正常に送信されました。",
-               //message_id: insertedMessageId
-             });
-           });
-         })
-         .catch((err) => {
-           // メンション挿入のいずれかが失敗した場合
-           return db.rollback(function () {
-             return res.status(500).json({
-               result_code: 0,
-               message: "メンションの追加に失敗しました。",
-               error: err.message
-             });
-           });
-         });
-     } else {
-       // メンションがない場合はそのままコミット
-       db.commit(function (err) {
-         if (err) {
-           return db.rollback(function () {
-             return res.status(500).json({
-               result_code: 0,
-               message: "トランザクションのコミットに失敗しました。"
-             });
-           });
-         }
-
-         return res.status(200).json({
-           result_code: 1,
-           message: "メッセージが正常に送信されました。",
-           //message_id: insertedMessageId
-         });
-       });
-     }
-   });
- });
+      // メッセージを正常に取得した場合
+      return res.status(200).json({
+        result_code: 1,
+        messages: result
+      });
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = app;
