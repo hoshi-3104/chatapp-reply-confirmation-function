@@ -220,18 +220,9 @@ const Chat = ({ tabs, selectedTab, setSelectedTab, onRemoveTab}) =>{
           {selectedTab !== "chat" && tab.id !==  "chat" && (
             <button className="close-button" onClick={() => onRemoveTab(tab.id)}>✖</button>
             )}
-            
+
         </label>
       ))}
-    </div>
-    
-    <div className="top">
-      <div className="user">
-        <img src="./avatar.png" alt="" />
-        <div className="texts">
-          <span>{toUserName}</span>
-        </div>
-      </div>
     </div>
     
     <div className="center">

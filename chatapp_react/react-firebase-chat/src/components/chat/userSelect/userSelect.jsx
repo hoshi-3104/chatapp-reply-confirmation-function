@@ -14,7 +14,7 @@ const AddUser = ({ text, handleSend, buttonPosition}) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
   const adjustedTop = buttonPosition.top + buttonPosition.height - (windowHeight > 600 ? 190 : 150);  // 画面の高さが600px以上の場合に調整
-  const adjustedLeft = buttonPosition.left - (windowWidth > 800 ? 280 : 200);  // 画面の幅が800px以上の場合に調整
+  const adjustedLeft = buttonPosition.left - (windowWidth > 800 ? 310 : 200);  // 画面の幅が800px以上の場合に調整
 
   const handleClosePopup = () => {
     setShowPopup(false); // ポップアップを閉じる

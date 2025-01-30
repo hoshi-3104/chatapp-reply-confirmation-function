@@ -36,7 +36,7 @@
         /* ポップアップの基本スタイル */
     .calendar-popup {
       position: absolute; 
-      top: -70px; /* 親の高さに合わせてその下に配置 */
+      top: -100px; /* 親の高さに合わせてその下に配置 */
       left: 180%; /* 親の幅に合わせてその右側に配置 */
       
       transform: translate(-50%, -50%); /* 中央に整列 */

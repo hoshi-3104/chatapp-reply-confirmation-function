@@ -3,7 +3,7 @@ import "./chatList.css";
 import AddUser from "./addUser/AddUser";
 
 const ChatList = () => {
-    const sendUserId = 2;
+    const sendUserId = 1;
     const [users, setUsers] = useState([]);
     const [sendUserName, setSendUserName] = useState(""); // 自分のユーザー名
     const [filteredUsers, setFilteredUsers] = useState([]);
@@ -41,14 +41,6 @@ const ChatList = () => {
                 <div className="member">
                     <img src="./Member_icon.png" alt="" />
                     <h1>Member</h1>
-                </div>
-                <div className="search">
-                <img
-                    src={addMode ? "./minus.png" : "./plus.png"}
-                    alt=""
-                    className="add"
-                    onClick={() => setAddMode((prev) => !prev)}
-                />
                 </div>
             </div>
 
