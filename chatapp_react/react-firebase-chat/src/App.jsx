@@ -12,7 +12,7 @@ const App = () => {
 
   // 新しいタブを追加する関数
   const handleAddTab = () => {
-    const newTab = { id: tabs.length , label: `タブ ${tabs.length}` };
+    const newTab = { id: tabs.length , label: `スレッド ${tabs.length}` };
     setTabs((prevTabs) => [...prevTabs, newTab]);
     setSelectedTab(newTab.id);
   };
@@ -27,7 +27,7 @@ const App = () => {
   // const user = true
   const [user, setUser] = useState(false); // user 状態を追加
   const [username, setUsername] = useState(''); // username 状態を追加
-
+  
   return (
     <div className='container'>
       {
@@ -48,7 +48,6 @@ const App = () => {
         setUser={setUser}
         setUsername={setUsername} /> )
       }
-      
     </div>
   );
 };

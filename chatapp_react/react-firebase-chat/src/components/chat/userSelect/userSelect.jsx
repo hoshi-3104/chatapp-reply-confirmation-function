@@ -3,15 +3,15 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./userSelect.css";
 
-const AddUser = ({ text, handleSend, buttonPosition}) => {
+const AddUser = ({ text, handleSend, buttonPosition, username}) => {
   const [showPopup, setShowPopup] = useState(true); // ポップアップ全体の状態
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState("");
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
-  const adjustedTop = buttonPosition.top + buttonPosition.height - (windowHeight > 600 ? 190 : 150);  // 画面の高さが600px以上の場合に調整
-  const adjustedLeft = buttonPosition.left - (windowWidth > 800 ? 290 : 200);  // 画面の幅が800px以上の場合に調整
+  const adjustedTop = buttonPosition.top + buttonPosition.height - (windowHeight > 600 ? 200 : 150);  // 画面の高さが600px以上の場合に調整
+  const adjustedLeft = buttonPosition.left - (windowWidth > 800 ? 320 : 200);  // 画面の幅が800px以上の場合に調整
 
   const handleClosePopup = () => {
     setShowPopup(false); // ポップアップを閉じる
@@ -20,7 +20,7 @@ const AddUser = ({ text, handleSend, buttonPosition}) => {
   const handleCalendarSend = () => {
     // テキストが空でなければ送信
     if (text.trim() !== "") {
-      handleSend(); // 親の送信関数を呼び出す
+      handleSend(username); // 親の送信関数を呼び出す
       setShowPopup(false);
     }
   };
@@ -75,7 +75,8 @@ const AddUser = ({ text, handleSend, buttonPosition}) => {
                 className="checkbox"
               />
               <img src="./avatar.png" alt="" />
-              <span>user1</span>
+              <span>Hoshino
+              </span>
             </label>
           </div>
 

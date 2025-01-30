@@ -112,10 +112,10 @@ const Chat = ( { tabs, selectedTab, setSelectedTab, onRemoveTab,username}) => {
               checked={selectedTab === tab.id}
               onChange={() => setSelectedTab(tab.id)}
             />
-            {tab.label}
+            <span className="tab-label-text">{tab.label}</span>
 
             {selectedTab !== "chat" && tab.id !==  "chat" && (
-              <button onClick={() => onRemoveTab(tab.id)}>✖</button>
+              <button className="close-button" onClick={() => onRemoveTab(tab.id)}>✖</button>
             )}
             
           </label>
@@ -197,7 +197,7 @@ const Chat = ( { tabs, selectedTab, setSelectedTab, onRemoveTab,username}) => {
         />
       </div>
     </div>
-      {addUserVisible && buttonPosition && <AddUser text={text} handleSend={handleSend} buttonPosition={buttonPosition}/>} {/* AddUser を条件付きで表示 */}
+      {addUserVisible && buttonPosition && <AddUser text={text} handleSend={handleSend} buttonPosition={buttonPosition} username={username}/>} {/* AddUser を条件付きで表示 */}
     </div>
   );
 };

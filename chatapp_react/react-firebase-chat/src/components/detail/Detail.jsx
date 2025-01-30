@@ -7,7 +7,7 @@ const Detail = ({ onAddTab }) => {
       <div className="response_needed">
         <div className="title">
             <img src="./Respons_Needed.png" alt="" />
-            <h3>Response Needed</h3>
+            <h3>未返信</h3>
         </div>
         <div className="items">
 
@@ -63,7 +63,7 @@ const Detail = ({ onAddTab }) => {
       <div className="response_waited">
         <div className="title">
             <img src="./Respons_Waited.png" alt="" />
-            <h3>Response Needed</h3>
+            <h3>返信待ち</h3>
         </div>
         <div className="items">
 

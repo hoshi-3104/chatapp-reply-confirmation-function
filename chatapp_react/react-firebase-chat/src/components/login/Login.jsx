@@ -42,7 +42,8 @@ const Login = ({ setUser, setUsername }) => {
     const { username, password } = credentials;
 
     if (validCredentials[username] === password) {
-      setUser(true); // ユーザーが認証された場合、user 状態を true に設定
+      setUser(true);
+       // ユーザーが認証された場合、user 状態を true に設定
       setUsername(username); // ユーザー名をセット
     } else {
       alert("Invalid credentials");
@@ -71,7 +72,7 @@ const Login = ({ setUser, setUsername }) => {
           <button type="submit">Sign In</button>
         </form>
       </div>
-      <div className="separator"></div>
+      {/* <div className="separator"></div>
       <div className="item">
         <h2>Create an Account</h2>
         <form>
@@ -85,7 +86,7 @@ const Login = ({ setUser, setUsername }) => {
           <input type="password" placeholder="Password" name="password" />
           <button>Sign Up</button>
         </form>
-      </div>
+      </div> */}
     </div>
   );
 };
