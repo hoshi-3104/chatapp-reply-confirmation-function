@@ -13,8 +13,8 @@ const AddUser = ({ text, handleSend, buttonPosition}) => {
   const [limitTime, setLimitTime] = useState(null); // limit_timeの状態を追加
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
-  const adjustedTop = buttonPosition.top + buttonPosition.height - (windowHeight > 600 ? 200 : 150);  // 画面の高さが600px以上の場合に調整
-  const adjustedLeft = buttonPosition.left - (windowWidth > 800 ? 320 : 200);  // 画面の幅が800px以上の場合に調整
+  const adjustedTop = buttonPosition.top + buttonPosition.height - (windowHeight > 600 ? 190 : 150);  // 画面の高さが600px以上の場合に調整
+  const adjustedLeft = buttonPosition.left - (windowWidth > 800 ? 280 : 200);  // 画面の幅が800px以上の場合に調整
 
   const handleClosePopup = () => {
     setShowPopup(false); // ポップアップを閉じる
@@ -130,14 +130,15 @@ const AddUser = ({ text, handleSend, buttonPosition}) => {
           </label>
         ))}
       </div>
-      <div className="buttom">
+
+      { <div className="buttom">
         <button onClick={handleCalendarSend} className="send">送信</button>
         <div className="addlist-wrapper">
           <button className="icon-button" onClick={handleCalendarClick}>
             <img src="./カレンダー.png" alt="カレンダー" />
             </button>
         </div>
-      </div>
+      </div> }
       {showDatePicker && (
             <div className="calendar-popup">
               <h3>返信期限を設定</h3>
