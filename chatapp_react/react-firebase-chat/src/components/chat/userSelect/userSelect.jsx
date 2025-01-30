@@ -13,8 +13,8 @@ const AddUser = ({ text, handleSend, buttonPosition}) => {
   const [limitTime, setLimitTime] = useState(null); // limit_timeの状態を追加
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
-  const adjustedTop = buttonPosition.top + buttonPosition.height - (windowHeight > 600 ? 190 : 150);  // 画面の高さが600px以上の場合に調整
-  const adjustedLeft = buttonPosition.left - (windowWidth > 800 ? 290 : 200);  // 画面の幅が800px以上の場合に調整
+  const adjustedTop = buttonPosition.top + buttonPosition.height - (windowHeight > 600 ? 200 : 150);  // 画面の高さが600px以上の場合に調整
+  const adjustedLeft = buttonPosition.left - (windowWidth > 800 ? 320 : 200);  // 画面の幅が800px以上の場合に調整
 
   const handleClosePopup = () => {
     setShowPopup(false); // ポップアップを閉じる
@@ -133,7 +133,6 @@ const AddUser = ({ text, handleSend, buttonPosition}) => {
 
       <div className="buttom">
         <div className="addlist-wrapper">
-          <button className="addlist">未返信リストに追加</button>
           <button className="icon-button" onClick={handleCalendarClick}>
             <img src="./カレンダー.png" alt="カレンダー" />
           </button>

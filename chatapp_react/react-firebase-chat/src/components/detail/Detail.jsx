@@ -8,8 +8,33 @@ const Detail = ({onAddTab}) => {
   const [waitingResponseMessages, setWaitingResponseMessages] = useState([]); // 返信待ちリスト
   const [userName, setUserName] = useState(""); // 送信者ユーザー名の状態を管理
   const [toUserName, setToUserName] = useState(""); // 送り先ユーザー名の状態を管理
+  const [threadStatuses, setThreadStatuses] = useState({});
 
-
+  const fetchThreadMessages = async (threadId) => {
+    try {
+      console.log("sureddo:",threadId)
+      const response = await fetch(`http://localhost:3001/api/messages/thread/${threadId}`);
+      const data = await response.json();
+  
+      if (data.result_code === 1) {
+        const messages = data.messages;
+        console.log(messages)
+        if (messages.length >= 2) {
+          console.log(`スレッドID ${threadId} に一致するメッセージが2つ以上存在します`);
+          return { messages, hasMultipleMessages: true }; // 条件を満たす場合のフラグ付き
+        } else {
+          console.log(`スレッドID ${threadId} に一致するメッセージは1つ以下です`);
+          return { messages, hasMultipleMessages: false }; // 条件を満たさない場合
+        }
+      } else {
+        console.error("スレッドメッセージの取得に失敗しました");
+        return [];
+      }
+    } catch (error) {
+      console.error("エラー:", error);
+      return [];
+    }
+  };
   //送信者ユーザ名取得処理
   useEffect(() => {
     const fetchUserName = async () => {
@@ -96,13 +121,33 @@ const Detail = ({onAddTab}) => {
     return `${month}/${day} ${hours}:${minutes}`;
   };
 
+  useEffect(() => {
+    const fetchAllThreadStatuses = async () => {
+      const statuses = {};
+  
+      for (const message of waitingResponseMessages) {
+        const threadId = message.THREAD_ID;
+        console.log(threadId)
+  
+        if (threadId) {
+          const { hasMultipleMessages } = await fetchThreadMessages(threadId);
+          console.log("hasMultipleMessages:", hasMultipleMessages)
+          statuses[threadId] = hasMultipleMessages;
+        }
+      }
+  
+      setThreadStatuses(statuses); // 状態を更新
+    };
+  
+    fetchAllThreadStatuses();
+  }, [toUserId, sendUserId, waitingResponseMessages]); // 依存関係にメッセージ一覧を追加
   return (
     <div className="detail">
       {/* 未返信リスト */}
       <div className="response_needed">
         <div className="title">
           <img src="./Respons_Needed.png" alt="" />
-          <h3>Response Needed</h3>
+          <h3>未返信</h3>
         </div>
         <div className="items">
           {unrepliedMessages.map((data) => (
@@ -131,25 +176,29 @@ const Detail = ({onAddTab}) => {
       <div className="response_waited">
         <div className="title">
           <img src="./Respons_Waited.png" alt="" />
-          <h3>Response Waited</h3>
+          <h3>返信待ち</h3>
         </div>
         <div className="items">
           {waitingResponseMessages.map((data) => (
-            <div className="message" key={data.MESSAGE_ID}>
+            <div className={`item ${
+              threadStatuses[data.THREAD_ID] ? "reply-done" : ""
+            }`}>
+            <div className="message"  key={data.MESSAGE_ID}>
               <div className="user">
-                <span className="reply_text">返信済み</span>
-                <span className="time">{data.SEND_TIME}</span>
+                {threadStatuses[data.THREAD_ID] && (
+                <span className="reply_text">返信済み</span> 
+                )}
+                <span className="time">{formatDateTime(data.SEND_TIME)}</span>
               </div>
               <div className="texts">
                 <p>{data.MESSAGES}</p>
               </div>
               <div className="button">
                 <div className="replyuser">
-                  <img src="./avatar.png" alt="" />
-                  <span className="limit">{data.THREAD_ID} 件の返信</span>
                 </div>
-                <button className="reply">スレッド返信</button>
+                <button className="reply" onClick={() =>onAddTab(data.MESSAGE_ID)}>スレッド返信</button>
               </div>
+            </div>
             </div>
           ))}
         </div>

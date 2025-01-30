@@ -4,7 +4,6 @@ import Userinfo from "./userInfo/Userinfo"
 const List = () => {
     return (
       <div className='list'>
-        <Userinfo/>
         <ChatList/>
       </div>
     )
