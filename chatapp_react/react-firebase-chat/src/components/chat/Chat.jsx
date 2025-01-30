@@ -168,9 +168,19 @@ const Chat = ({ tabs, selectedTab, setSelectedTab, onRemoveTab}) =>{
 
   const renderMessages = () => {
     const selectedTabId = selectedTab;  // 選択されているタブIDを取得
+    let seenThreads = new Set();  // 表示した THREAD_ID を記録するセット
     const filteredMessages = selectedTabId === 'chat'
-    ? messages  // 全メッセージを表示
-    : messages.filter((message) => message.THREAD_ID === selectedTabId);  // スレッドIDでフィルタリング
+    ? messages.filter((message) => {
+      if (message.THREAD_ID === 0) {
+          return true;  // THREAD_ID が 0 のメッセージはすべて表示
+      }
+      if (!seenThreads.has(message.THREAD_ID)) {
+          seenThreads.add(message.THREAD_ID);  // 初めて出てきた THREAD_ID を記録
+          return true;
+      }
+      return false;  // すでに表示した THREAD_ID のメッセージは除外
+  })
+  : messages.filter((message) => message.THREAD_ID === selectedTabId);  // スレッドIDでフィルタリング
     return filteredMessages.map((message, index) => {
       const isOwnMessage = message.SEND_USER_ID === sendUserId;
       const formattedTime = (() => {
@@ -224,6 +234,7 @@ const Chat = ({ tabs, selectedTab, setSelectedTab, onRemoveTab}) =>{
         </label>
       ))}
     </div>
+
     
     <div className="center">
       {renderMessages()} {/* メッセージを表示 */}
