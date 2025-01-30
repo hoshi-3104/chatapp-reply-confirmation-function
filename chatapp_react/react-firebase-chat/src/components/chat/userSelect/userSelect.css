@@ -146,7 +146,7 @@
     background-color: rgb(231, 231, 231); 
 
     display: flex;
-    flex-direction: column; /* 縦に並べる */
+    flex-direction: row; /* 縦に並べる */
     gap: 5px; /* ボタン間の間隔を設定 */
     align-items: flex-start; /* ボタンを中央揃え（必要に応じて変更） */
     margin-top: 20px;

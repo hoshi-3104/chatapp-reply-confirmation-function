@@ -130,14 +130,13 @@ const AddUser = ({ text, handleSend, buttonPosition}) => {
           </label>
         ))}
       </div>
-
       <div className="buttom">
+        <button onClick={handleCalendarSend} className="send">送信</button>
         <div className="addlist-wrapper">
           <button className="icon-button" onClick={handleCalendarClick}>
             <img src="./カレンダー.png" alt="カレンダー" />
-          </button>
+            </button>
         </div>
-        <button onClick={handleCalendarSend} className="send">送信</button>
       </div>
       {showDatePicker && (
             <div className="calendar-popup">
