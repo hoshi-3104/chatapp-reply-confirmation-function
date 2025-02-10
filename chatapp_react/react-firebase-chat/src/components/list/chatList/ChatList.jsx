@@ -3,7 +3,7 @@ import "./chatList.css";
 import AddUser from "./addUser/AddUser";
 
 const ChatList = () => {
-    const sendUserId = 1;
+    const sendUserId = 2;
     const [users, setUsers] = useState([]);
     const [sendUserName, setSendUserName] = useState(""); // 自分のユーザー名
     const [filteredUsers, setFilteredUsers] = useState([]);
