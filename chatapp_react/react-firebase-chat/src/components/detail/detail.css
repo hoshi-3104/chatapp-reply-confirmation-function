@@ -61,7 +61,7 @@
         }
         
         .message .user .time {
-          font-size: 0.6em;
+          font-size: 0.8em;
           letter-spacing: -0.05em;
           margin-left: -15px;
           margin-bottom: -5px;
@@ -121,7 +121,7 @@
         }
         
         .button .limit {
-          font-size: 10px;
+          font-size: 13px;
           letter-spacing: -0.05em;
           margin-left: 5px;
         }
@@ -160,6 +160,8 @@
         overflow-y: auto; /* 高さを超えた場合にスクロール */
         scrollbar-width: none; /* Firefox向け: スクロールバーを非表示 */
       }
+
+      
       
       /* Chrome, Safari, Edge のスクロールバー非表示 */
       .items::-webkit-scrollbar {
@@ -168,16 +170,21 @@
 
       .item{
         width: 100%;
+        background-color: #f3f1f1;
+      }
+      .item.reply-done {
         background-color: #ffd4d4;
       }
       
+      
       /* その他のCSSコードはそのまま */
       .message {
-        padding: 20px 0px 10px 10px;
-        max-width: 93%;
+        padding: 30px 5px 10px 10px;
+        max-width: 95%;
         gap: 20px;
         position: relative; 
       }
+
       
       .message .user {
         align-items: center;
@@ -193,26 +200,28 @@
       }
       
       .message .user .reply_text {
-        font-size: 0.7em;
+        font-size: 0.9em;
         letter-spacing: -0.05em;
         position: absolute; 
         top: 0; 
         left:0; 
-        margin-top: 3px;
+        margin-top: 10px;
         margin-left: 12px;
         color: #ff0000;
         font-weight: bold;
       }
       .message .user .time {
-        font-size: 0.6em;
+        margin-top: 12px;
+        margin-right: 10px;
+        font-size: 0.9em;
         letter-spacing: -0.05em;
         position: absolute; 
         top: 0; 
         right:0; 
-        margin-top: 6px;
       }
       
       .message .texts {
+        margin-top: 3px;
         flex: 1;
         display: flex;
         flex-direction: column;
