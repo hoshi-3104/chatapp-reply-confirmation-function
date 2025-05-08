@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import "./detail.css";
 
 const Detail = ({onAddTab}) => {   
-  const toUserId =1;
-  const sendUserId = 2;
+  const toUserId =2;
+  const sendUserId = 1;
   const [unrepliedMessages, setUnrepliedMessages] = useState([]); // 未返信リスト
   const [waitingResponseMessages, setWaitingResponseMessages] = useState([]); // 返信待ちリスト
   const [userName, setUserName] = useState(""); // 送信者ユーザー名の状態を管理

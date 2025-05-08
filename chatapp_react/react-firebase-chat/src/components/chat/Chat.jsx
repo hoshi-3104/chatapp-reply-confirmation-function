@@ -10,8 +10,8 @@ const Chat = ({ tabs, selectedTab, setSelectedTab, onRemoveTab}) =>{
   const [text,setText] = useState(""); // メッセージ入力欄の状態を管理。デフォルトを空のテキストに
   const [messages, setMessages] = useState([]); // メッセージリストの状態管理。デフォルト空
   const endRef= useRef(null); // メッセージリストを一番下にスクロールするために使用
-  const sendUserId = 2; // サンプルとして固定値。実際にはユーザーIDを使用
-  const toUserId = 1;   // 宛先も固定値。実際には動的な値にする
+  const sendUserId = 1; // サンプルとして固定値。実際にはユーザーIDを使用
+  const toUserId = 2;   // 宛先も固定値。実際には動的な値にする
   const [buttonPosition, setButtonPosition] = useState(null); // ボタンの位置情報
   const buttonRef = useRef(null); // ボタンの参照
   const limit_time = null;
